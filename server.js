@@ -1,5 +1,6 @@
 const express=require('express');
 const app=express();
+const connectToDatabase = require('./config/connectToDatabase');
 
 app.get('/', (req,res) => {
     res.send('hello');
