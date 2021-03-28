@@ -2,8 +2,8 @@ const mongoose=require('mongoose');
 const Schema = mongoose.Schema;
 const uniqueValidator=require('mongoose-unique-validator');
 
-let studentSchema=new Schema({
-    rollno: {
+let chairSchema=new Schema({
+    idno: {
         type: String,
         unique: true,
         required: true,
@@ -14,10 +14,10 @@ let studentSchema=new Schema({
     },
 },
 {
-    collection: 'students',
+    collection: 'chairpersons',
 });
 
-studentSchema.plugin(uniqueValidator,{
-    message: 'Roll number already exists'
+chairSchema.plugin(uniqueValidator,{
+    message: 'ID already exists'
 });
-module.exports=mongoose.model('Student',studentSchema);
+module.exports=mongoose.model('Chairperson',chairSchema);
