@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connectToDatabase = async () => {
     try {
         const connection=await mongoose.connect(
-            process.env.MONGO_URI,
+            process.env.ATLAS_URI,
             {
                 useCreateIndex: true,
                 useFindAndModify: true,
