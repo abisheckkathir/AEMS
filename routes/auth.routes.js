@@ -37,7 +37,7 @@ router.post('/signin-student', (req,res,next) => {
             expiresIn: '1h',
         });
         res.status(200).json({
-            token=jwtToken,
+            token: jwtToken,
             expiresIn: 3600,
             msg: getUser,
         });
@@ -51,15 +51,75 @@ router.post('/signin-student', (req,res,next) => {
 // Sign-in faculty
 router.post('/signin-faculty', (req,res,next) => {
     let getUser;
-    facultySchema.findOne({ idno: req.body.idno }).then().then().catch();
+    facultySchema.findOne({ idno: req.body.idno }).then((user) => {
+        if(!user) {
+            return res.status(401).json({
+                message: 'Authentication failed',
+            });
+        }
+        getUser=user;
+        return bcrypt.compare(req.body.password,user.password);
+    }).then((response) => {
+        if(!response) {
+            return res.status(401).json({
+                message: 'Authentication failed',
+            });
+        }
+        let jwtToken=jwt.sign({
+            idno: getUser.idno,
+            userID: getUser._id,
+        },
+        'secret',
+        {
+            expiresIn: '1h',
+        });
+        res.status(200).json({
+            token: jwtToken,
+            expiresIn: 3600,
+            msg: getUser,
+        });
+    }).catch((err) => {
+        return res.status(401).json({
+            message: 'Authentication failed',
+        });
+    });
 });
 
 // Sign-in chair
 router.post('/signin-chair', (req,res,next) => {
     let getUser;
-    chairSchema.findOne({ idno: req.body.idno }).then().then().catch();
+    chairSchema.findOne({ idno: req.body.idno }).then((user) => {
+        if(!user) {
+            return res.status(401).json({
+                message: 'Authentication failed',
+            });
+        }
+        getUser=user;
+        return bcrypt.compare(req.body.password,user.password);
+    }).then((response) => {
+        if(!response) {
+            return res.status(401).json({
+                message: 'Authentication failed',
+            });
+        }
+        let jwtToken=jwt.sign({
+            idno: getUser.idno,
+            userID: getUser._id,
+        },
+        'secret',
+        {
+            expiresIn: '1h',
+        });
+        res.status(200).json({
+            token: jwtToken,
+            expiresIn: 3600,
+            msg: getUser,
+        });
+    }).catch((err) => {
+        return res.status(401).json({
+            message: 'Authentication failed',
+        });
+    });
 });
-
-
 
 module.exports=router;
