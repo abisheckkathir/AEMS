@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
-const config = require('config');
 
 const connectToDatabase = async () => {
     try {
-        await mongoose.connect(
-            config.get('mongoURI'),
+        const connection=await mongoose.connect(
+            process.env.MONGO_URI,
             {
                 useCreateIndex: true,
                 useFindAndModify: true,
