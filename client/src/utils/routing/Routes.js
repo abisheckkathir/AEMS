@@ -6,6 +6,7 @@ import Sample from "../../pages/Sample";
 import Login from "../../pages/Login";
 import Signup from "../../pages/Signup";
 import Users from "../../pages/Users";
+import Courses from "../../pages/Faculty/Courses";
 import Activated from "../../pages/Activated";
 
 //All the routes file
@@ -16,6 +17,7 @@ const Routes = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/users" component={Users} />
+        <Route exact path="/faculty/courses" component={Courses} />
         <Route exact path="/activated" component={Activated} />
         <PrivateRoute exact path="/sample" component={Sample} />
       </Switch>

@@ -22,6 +22,9 @@ const Navbar = ({ isAuthenticated, logout }) => {
       <li>
         <Link to="/signup">Sign Up</Link>
       </li>
+      <li>
+        <Link to="/dashboard">Dashboard</Link>
+      </li>
     </Fragment>
   );
 
