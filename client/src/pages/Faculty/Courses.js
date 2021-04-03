@@ -45,11 +45,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex"
   },
   fab: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(2),
     right: theme.spacing(2)
   },
-  toolbar: theme.mixins.toolbar,
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
@@ -160,12 +159,13 @@ export default function Courses() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Mini variant drawer
+            Course List
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
         variant="permanent"
+
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open
