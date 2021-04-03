@@ -122,30 +122,4 @@ router.post('/signin-chair', (req,res,next) => {
     });
 });
 
-//Add course by faculty
-router.post('/add-course',(req,res,next)=>{
-    try { 
-        const course = await courseSchema.findOne({ courseCode })
-            if (course) {
-                errors.courseCode = "Given Subject is already added"
-                return res.status(400).json(errors)
-            }
-        
-        const newCourse = await new courseSchema({
-            
-            courseCode,
-            courseName,
-            offeringFaculty
-        })
-        await newCourse.save()
-        
-    }
-    catch (err) {
-        console.log(`error in adding new subject", ${err.message}`)
-    }
-
-});
-
-
-
 module.exports=router;
