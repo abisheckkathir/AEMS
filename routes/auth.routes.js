@@ -133,6 +133,7 @@ router.post('/signin-chair', (req,res,next) => {
     });
 });
 
+<<<<<<< HEAD
 //Add course by faculty
 router.post('/add-course',(req,res)=>{
     try { 
@@ -217,3 +218,6 @@ router.post(
 
 
 module.exports=router;
+=======
+module.exports=router;
+>>>>>>> f5dd173d9af4c233311b710380321ae09d8cadc3
