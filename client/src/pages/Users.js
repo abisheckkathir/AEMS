@@ -269,13 +269,8 @@ function Courses({ addCourse, isAuthenticated }) {
         </IconButton>
       </div>
       <Divider />
-<<<<<<< HEAD
       {/* <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-=======
-      <List>
-        {["Starred","Search Course"].map((text, index) => (
->>>>>>> b03fa3363e5335dbeda2f20c1d38e5e8bfd5af9d
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <IconButton /> : <GridSearchIcon />}
@@ -285,7 +280,6 @@ function Courses({ addCourse, isAuthenticated }) {
         ))}
       </List> */}
       <Divider />
-<<<<<<< HEAD
       {/* <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem button key={text}>
@@ -297,10 +291,6 @@ function Courses({ addCourse, isAuthenticated }) {
         ))}
       </List> */}
     </Drawer>
-=======
- 
-    </Drawer>   
->>>>>>> b03fa3363e5335dbeda2f20c1d38e5e8bfd5af9d
     <Dialog
       disableEscapeKeyDown={true}
       disableBackdropClick={true}
