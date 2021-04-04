@@ -2,28 +2,30 @@ import React, { Suspense,Spinner } from "react";
 import clsx from "clsx";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import { DataGrid } from '@material-ui/data-grid';
 import List from "@material-ui/core/List";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
+import AddIcon from '@material-ui/icons/Add';
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -165,6 +167,7 @@ function Courses({ addCourse, isAuthenticated }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [diaopen, diasetOpen] = React.useState(false);
+  var selected = [];
   const [addData, SetAddData] = React.useState({
     courseCode: "",
     courseName: "",
@@ -179,6 +182,16 @@ function Courses({ addCourse, isAuthenticated }) {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+  const deleteCourse=()=>{
+    axios
+      .delete(`api/auth/delete-course/${selected}`)
+      .then(data => {
+        refreshRows();
+      })
+      .catch(err => alert(err));
+      window.location.reload(false);
+  };
+  
   const [dense] = React.useState(false);
   const handleDrawerClose = () => {
     setOpen(false);
@@ -256,7 +269,7 @@ function Courses({ addCourse, isAuthenticated }) {
         </IconButton>
       </div>
       <Divider />
-      <List>
+      {/* <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
@@ -265,9 +278,9 @@ function Courses({ addCourse, isAuthenticated }) {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-      </List>
+      </List> */}
       <Divider />
-      <List>
+      {/* <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
@@ -276,7 +289,7 @@ function Courses({ addCourse, isAuthenticated }) {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Drawer>
     <Dialog
       disableEscapeKeyDown={true}
@@ -326,20 +339,53 @@ function Courses({ addCourse, isAuthenticated }) {
     </Dialog>
 
     <div className={classes.toolbar} />
-    <Fab
+    {/* <Fab
       aria-label={fab.label}
       className={fab.className}
       color={fab.color}
       onClick={handleClickOpen}
     >
       {fab.icon}
-    </Fab>
+    </Fab> */}
     <Grid item xs={12} md={6}>
       <div className={classes.toolbar} />
       <div className={classes.toolbar} />
       <div className={classes.demo}>
-      <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={courses} columns={columns} pageSize={5} checkboxSelection />
+      <Button
+        variant="contained"
+        color="secondary"
+        style={{marginRight: 10}}
+        className={classes.button}
+        onClick={handleClickOpen}
+        startIcon={<AddCircleRoundedIcon />}
+      >
+        Add Course
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={deleteCourse}
+        startIcon={<DeleteIcon />}
+      >
+        Delete Course
+      </Button>
+      <div style={{ height: 20, width: '100%' }}></div>
+      <div style={{ height: 600, width: '100%' }}>
+      <DataGrid rows={courses} columns={columns} pageSize={10} checkboxSelection onRowSelected	={(param) => {
+                    console.log("aabbcc");
+                    if (param.isSelected){
+                      selected.push(param.data.id);
+                    }
+                    else{
+                      for (let i = 0; i < selected.length; i++) {
+                        if(selected[i]==param.data.id){
+                          selected.splice(i, 1);
+                        }
+                      }
+                    }
+                    console.log(selected);
+                }} />
     </div>      </div>
     </Grid>
   </div>);

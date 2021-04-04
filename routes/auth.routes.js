@@ -215,6 +215,21 @@ router.post(
     });
   });
 
+  router.route("/delete-course/:ids").delete((req, res, next) => {
+    console.log(req.params.ids)
+    var idarr = req.params.ids.split(",");
+    courseSchema.deleteMany({'courseCode':{'$in':idarr}}, (error, data) => {
+      if (error) {
+        console.log(error);
+        return next(error);
+      } else {
+        console.log(data);
+        res.status(200).json({
+          msg: data,
+        });
+      }
+    });
+  });
 
 module.exports=router;
 
