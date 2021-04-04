@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const uniqueValidator=require('mongoose-unique-validator');
 
 let studentSchema=new Schema({
-    rollno: {
+    idno: {
         type: String,
         unique: true,
         required: true,

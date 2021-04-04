@@ -21,40 +21,41 @@ router.get("/", auth, async (req, res) => {
   });
 // Sign-in student
 router.post('/signin-student', (req,res,next) => {
-    let getUser;
-    studentSchema.findOne({ rollno: req.body.idno })
-    .then((user) => {
-        if(!user) {
-            return res.status(401).json({
-                message: 'Authentication failed',
-            });
-        }
-        getUser=user;
-        return bcrypt.compare(req.body.password,user.password);
-    }).then((response) => {
-        if(!response) {
-            return res.status(401).json({
-                message: 'Authentication failed',
-            });
-        }
-        let jwtToken=jwt.sign({
-            rollno: getUser.rollno,
-            userID: getUser._id,
-        },
-        'secret',
-        {
-            expiresIn: '1h',
+  let getUser;
+  studentSchema.findOne({ idno: req.body.idno }).then((user) => {
+      if(!user) {
+          console.log('Authentication failed1')
+          return res.status(401).json({
+              message: 'Authentication failed',
+          });
+      }
+      getUser=user;
+      return bcrypt.compare(req.body.password,user.password);
+  }).then((response) => {
+      if(!response) {
+          console.log('Authentication failed2')
+          return res.status(401).json({
+              message: 'Authentication failed',
+          });
+      }
+      payload = {
+          user: {
+            idno: getUser.idno,
+            userId: getUser._id,
+          },
+        };
+        let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+          expiresIn: "1h",
         });
-        res.status(200).json({
-            token: jwtToken,
-            expiresIn: 3600,
-            msg: getUser,
+        return res.status(200).json({
+          token: jwtToken,
         });
-    }).catch((err) => {
-        return res.status(401).json({
-            message: 'Authentication failed',
+      })
+      .catch((err) => {
+        res.status(401).json({
+          message: "Authentication failed",
         });
-    });
+      });
 });
 
 // Sign-in faculty
@@ -98,39 +99,41 @@ router.post('/signin-faculty', (req,res,next) => {
 
 // Sign-in chair
 router.post('/signin-chair', (req,res,next) => {
-    let getUser;
-    chairSchema.findOne({ idno: req.body.idno }).then((user) => {
-        if(!user) {
-            return res.status(401).json({
-                message: 'Authentication failed',
-            });
-        }
-        getUser=user;
-        return bcrypt.compare(req.body.password,user.password);
-    }).then((response) => {
-        if(!response) {
-            return res.status(401).json({
-                message: 'Authentication failed',
-            });
-        }
-        let jwtToken=jwt.sign({
+  let getUser;
+  chairSchema.findOne({ idno: req.body.idno }).then((user) => {
+      if(!user) {
+          console.log('Authentication failed1')
+          return res.status(401).json({
+              message: 'Authentication failed',
+          });
+      }
+      getUser=user;
+      return bcrypt.compare(req.body.password,user.password);
+  }).then((response) => {
+      if(!response) {
+          console.log('Authentication failed2')
+          return res.status(401).json({
+              message: 'Authentication failed',
+          });
+      }
+      payload = {
+          user: {
             idno: getUser.idno,
-            userID: getUser._id,
-        },
-        'secret',
-        {
-            expiresIn: '1h',
+            userId: getUser._id,
+          },
+        };
+        let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+          expiresIn: "1h",
         });
-        res.status(200).json({
-            token: jwtToken,
-            expiresIn: 3600,
-            msg: getUser,
+        return res.status(200).json({
+          token: jwtToken,
         });
-    }).catch((err) => {
-        return res.status(401).json({
-            message: 'Authentication failed',
+      })
+      .catch((err) => {
+        res.status(401).json({
+          message: "Authentication failed",
         });
-    });
+      });
 });
 
 //Add course by faculty
@@ -157,7 +160,7 @@ router.post('/add-course',(req,res)=>{
 
 });
 router.post(
-    "/register-user",
+    "/register-faculty",
     (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -165,6 +168,104 @@ router.post(
       } else {
         bcrypt.hash(req.body.password, 10).then((hash) => {
           const user = new facultySchema({
+            idno: req.body.idno,
+            password: hash,
+          });
+  
+          user
+            .save()
+            .then((response) => {
+              if (!response) {
+                return res.status(401).json({
+                  message: "Authentication failed",
+                });
+              }
+  
+              //jwt payload
+              payload = {
+                user: {
+                  idno: user.idno,
+                  userId: user._id,
+                },
+              };
+              //jwt signature
+              let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+                expiresIn: "1h",
+              });
+              //Send authorization token
+              return res.status(200).json({
+                token: jwtToken,
+              });
+            })
+  
+            .catch((error) => {
+              res.status(500).json({
+                error: error,
+              });
+              console.log(error);
+            });
+        });
+      }
+    }
+  );
+  router.post(
+    "/register-student",
+    (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json(errors.array());
+      } else {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const user = new studentSchema({
+            idno: req.body.idno,
+            password: hash,
+          });
+  
+          user
+            .save()
+            .then((response) => {
+              if (!response) {
+                return res.status(401).json({
+                  message: "Authentication failed",
+                });
+              }
+  
+              //jwt payload
+              payload = {
+                user: {
+                  idno: user.idno,
+                  userId: user._id,
+                },
+              };
+              //jwt signature
+              let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+                expiresIn: "1h",
+              });
+              //Send authorization token
+              return res.status(200).json({
+                token: jwtToken,
+              });
+            })
+  
+            .catch((error) => {
+              res.status(500).json({
+                error: error,
+              });
+              console.log(error);
+            });
+        });
+      }
+    }
+  );
+  router.post(
+    "/register-chair",
+    (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json(errors.array());
+      } else {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const user = new chairSchema({
             idno: req.body.idno,
             password: hash,
           });

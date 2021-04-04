@@ -66,7 +66,7 @@ export const check_authenticated = () => async (dispatch) => {
   }
 };
 
-export const login = (idno, password) => async (dispatch) => {
+export const login = (idno, password,type) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export const login = (idno, password) => async (dispatch) => {
   const body = JSON.stringify({ idno, password });
   console.log(body);
   try {
-    const res = await axios.post("api/auth//signin-faculty", body, config);
+    const res = await axios.post("api/auth//signin-"+type, body, config);
     console.log(res.data);
     dispatch({
       type: LOGIN_SUCESS,
@@ -93,7 +93,7 @@ export const login = (idno, password) => async (dispatch) => {
   }
 };
 
-export const signup = (idno, password) => async (dispatch) => {
+export const signup = (idno, password,type) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export const signup = (idno, password) => async (dispatch) => {
   try {
     console.log(body);
     console.log(config)
-    const res = await axios.post("api/auth/register-user", body, config);
+    const res = await axios.post("api/auth/register-"+type, body, config);
     dispatch({
       type: SIGNUP_SUCESS,
       payload: res.data,
@@ -113,6 +113,7 @@ export const signup = (idno, password) => async (dispatch) => {
     dispatch(check_authenticated());
     console.log("user created!");
   } catch (err) {
+    console.log(err)
     dispatch({
       type: SIGNUP_FAILED,
     });
