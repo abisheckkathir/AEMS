@@ -381,7 +381,7 @@ function Courses({ addCourse, isAuthenticated }) {
                     }
                     else{
                       for (let i = 0; i < selected.length; i++) {
-                        if(selected[i]==param.data.id){
+                        if(selected[i]===param.data.id){
                           selected.splice(i, 1);
                         }
                       }
