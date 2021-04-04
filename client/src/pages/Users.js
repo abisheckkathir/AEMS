@@ -355,7 +355,7 @@ function Courses({ addCourse, isAuthenticated }) {
       <div className={classes.demo}>
       <Button
         variant="contained"
-        color="secondary"
+        color="primary"
         style={{marginRight: 10}}
         className={classes.button}
         onClick={handleClickOpen}
@@ -365,7 +365,7 @@ function Courses({ addCourse, isAuthenticated }) {
       </Button>
       <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         className={classes.button}
         onClick={deleteCourse}
         startIcon={<DeleteIcon />}
