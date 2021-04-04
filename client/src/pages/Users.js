@@ -3,7 +3,7 @@ import clsx from "clsx";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid, GridSearchIcon } from '@material-ui/data-grid';
 import List from "@material-ui/core/List";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -257,27 +257,18 @@ function Courses({ addCourse, isAuthenticated }) {
       </div>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Starred","Search Course"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 2 === 0 ? <IconButton /> : <GridSearchIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
+ 
+    </Drawer>   
     <Dialog
       disableEscapeKeyDown={true}
       disableBackdropClick={true}
