@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/action.auth";
+import { rows } from "./Home";
 
 function Copyright() {
   return (
@@ -52,20 +53,19 @@ const useStyles = makeStyles((theme) => ({
 function Login({ login, isAuthenticated }) {
   const classes = useStyles();
   const [loginData, SetLoginData] = useState({
-    name: "",
-    email: "",
+    idno: "",
     password: "",
   });
 
-  const { name, email, password } = loginData;
+  const { idno, password } = loginData;
 
   const onChange = (e) =>
     SetLoginData({ ...loginData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(name, email, password);
-    login(name, email, password);
+    console.log(idno, password);
+    login(idno, password);
   };
 
   //check authentication
@@ -91,8 +91,7 @@ function Login({ login, isAuthenticated }) {
             fullWidth
             id="email"
             label="Roll Number"
-            name="email"
-            autoComplete="email"
+            name="idno"
             autoFocus
             onChange={(e) => onChange(e)}
           />

@@ -34,4 +34,4 @@ courseSchema.plugin(uniqueValidator,{
     
     message:'course already exists'
 });
-module.exports=mongoose.module('course',courseSchema);
+module.exports=mongoose.model('course',courseSchema);

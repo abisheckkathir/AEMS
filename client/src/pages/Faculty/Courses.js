@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Suspense,Spinner } from "react";
 import clsx from "clsx";
+import axios from "axios";
+import { DataGrid } from '@material-ui/data-grid';
 import List from "@material-ui/core/List";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -31,6 +33,43 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { addCourse,rows,refreshRows,abc } from "../actions/action.auth";
+import { connect } from "react-redux";
+
+const columns = [
+  { field: 'courseCode', headerName: 'Course Code', width: 70 },
+  { field: 'courseName', headerName: 'Course Name', width: 130 },
+  { field: 'lastName', headerName: 'Last name', width: 130 },
+];
+// const Courselist = React.lazy(() => {const data=axios.get('/api/auth/course-list').then(resp => {
+//   rows=resp.data;
+//   console.log(resp.data);
+
+// });});
+// const rows = [
+//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+// ];
+// var rows;
+// async function Courselist(){
+  
+//   const data= await axios.get('/api/auth/course-list').then(resp => {
+//     rows=resp.data;
+//     // var obj = JSON.parse(resp.data);
+//     console.log(rows);
+  
+//   });
+//   return  ;
+
+
+// }
 
 const drawerWidth = 240;
 function generate(element) {
@@ -40,6 +79,7 @@ function generate(element) {
     })
   );
 }
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex"
@@ -107,11 +147,33 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Courses() {
+function Courses({ addCourse, isAuthenticated }) {
+  console.log("aaaaaaaaaaaa");
+  console.log(abc);
+//   const [rows, setRows] = React.useState(null);
+//   var dd=false;
+//   const fetchData = async () => {
+//     const response = await axios.get('/api/auth/course-list')
+//     dd=true;
+//     console.log(response.data)
+//     setRows(response.data) 
+// }
+//   fetchData();
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [diaopen, diasetOpen] = React.useState(false);
+  const [addData, SetAddData] = React.useState({
+    courseCode: "",
+    courseName: "",
+    offeringFaculty: "faculty1",
+  });
+
+  const { courseCode, courseName,offeringFaculty } = addData;
+
+  const onChange = (e) =>
+    SetAddData({ ...addData, [e.target.name]: e.target.value });
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -134,158 +196,151 @@ export default function Courses() {
   };
   const handleDone = () => {
     diasetOpen(false);
+    addCourse(courseCode,courseName,offeringFaculty);
   };
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
+  return (<div className={classes.root}>
+    <CssBaseline />
 
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Course List
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
+    <AppBar
+      position="fixed"
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: open
+      })}
+    >
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          className={clsx(classes.menuButton, {
+            [classes.hide]: open
+          })}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap>
+          Course List
+        </Typography>
+      </Toolbar>
+    </AppBar>
+    <Drawer
+      variant="permanent"
 
-        className={clsx(classes.drawer, {
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: open,
+        [classes.drawerClose]: !open
+      })}
+      classes={{
+        paper: clsx({
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Dialog
-        disableEscapeKeyDown={true}
-        disableBackdropClick={true}
-        open={diaopen}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">New Course</DialogTitle>
-        <DialogContent>
-          <form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  name="courseCode"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="courseCode"
-                  label="Course Code"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="courseName"
-                  label="Course Name"
-                  name="courseName"
-                />
-              </Grid>
+        })
+      }}
+    >
+      <div className={classes.toolbar}>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === "rtl" ? (
+            <ChevronRightIcon />
+          ) : (
+            <ChevronLeftIcon />
+          )}
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+    <Dialog
+      disableEscapeKeyDown={true}
+      disableBackdropClick={true}
+      open={diaopen}
+      onClose={handleClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">New Course</DialogTitle>
+      <DialogContent>
+        <form className={classes.form} noValidate>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="courseCode"
+                variant="outlined"
+                required
+                fullWidth
+                id="courseCode"
+                label="Course Code"
+                autoFocus
+                onChange={(e) => onChange(e)}
+              />
             </Grid>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDone} color="primary">
-            Add Course
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="courseName"
+                label="Course Name"
+                name="courseName"
+                onChange={(e) => onChange(e)}
+              />
+            </Grid>
+          </Grid>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleDone} color="primary">
+          Add Course
+        </Button>
+      </DialogActions>
+    </Dialog>
 
+    <div className={classes.toolbar} />
+    <Fab
+      aria-label={fab.label}
+      className={fab.className}
+      color={fab.color}
+      onClick={handleClickOpen}
+    >
+      {fab.icon}
+    </Fab>
+    <Grid item xs={12} md={6}>
       <div className={classes.toolbar} />
-      <Fab
-        aria-label={fab.label}
-        className={fab.className}
-        color={fab.color}
-        onClick={handleClickOpen}
-      >
-        {fab.icon}
-      </Fab>
-      <Grid item xs={12} md={6}>
-        <div className={classes.toolbar} />
-        <div className={classes.toolbar} />
-        <div className={classes.demo}>
-          <List dense={dense}>
-            {generate(
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <FolderIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Single-line item" />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete">
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            )}
-          </List>
-        </div>
-      </Grid>
-    </div>
-  );
+      <div className={classes.toolbar} />
+      <div className={classes.demo}>
+      <div style={{ height: 400, width: '100%' }}>
+      <DataGrid rows={this.state.courses} columns={columns} pageSize={5} checkboxSelection />
+    </div>      </div>
+    </Grid>
+  </div>);
+  
 }
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  
+});
+export default connect(mapStateToProps, { addCourse })(Courses);

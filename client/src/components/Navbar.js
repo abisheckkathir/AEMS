@@ -6,11 +6,15 @@ import { logout } from '../actions/action.auth';
 const Navbar = ({ isAuthenticated, logout }) => {
   const authorizedLinks = (
     <>
+    <li>
+        <Link to="/users">Courses</Link>
+      </li>
       <li>
         <Link to="/" onClick={logout}>
           Logout
         </Link>
       </li>
+      
     </>
   );
 
@@ -22,9 +26,7 @@ const Navbar = ({ isAuthenticated, logout }) => {
       <li>
         <Link to="/signup">Sign Up</Link>
       </li>
-      <li>
-        <Link to="/dashboard">Dashboard</Link>
-      </li>
+      
     </Fragment>
   );
 

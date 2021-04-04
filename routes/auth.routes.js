@@ -6,10 +6,19 @@ const router=express.Router();
 const studentSchema=require('../models/students');
 const facultySchema=require('../models/faculty');
 const chairSchema=require('../models/chairperson');
-const authorize=require('../middlewares/auth');
 const courseSchema=require('../models/course');
+const auth = require("../middlewares/auth");
 const { check, validationResult }=require('express-validator');
 
+router.get("/", auth, async (req, res) => {
+    try {
+      const user = await facultySchema.findById(req.user.userId).select("-password");
+      res.json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
+  });
 // Sign-in student
 router.post('/signin-student', (req,res,next) => {
     let getUser;
@@ -53,6 +62,7 @@ router.post('/signin-faculty', (req,res,next) => {
     let getUser;
     facultySchema.findOne({ idno: req.body.idno }).then((user) => {
         if(!user) {
+            console.log('Authentication failed1')
             return res.status(401).json({
                 message: 'Authentication failed',
             });
@@ -61,28 +71,29 @@ router.post('/signin-faculty', (req,res,next) => {
         return bcrypt.compare(req.body.password,user.password);
     }).then((response) => {
         if(!response) {
+            console.log('Authentication failed2')
             return res.status(401).json({
                 message: 'Authentication failed',
             });
         }
-        let jwtToken=jwt.sign({
-            idno: getUser.idno,
-            userID: getUser._id,
-        },
-        'secret',
-        {
-            expiresIn: '1h',
-        });
-        res.status(200).json({
+        payload = {
+            user: {
+              idno: getUser.idno,
+              userId: getUser._id,
+            },
+          };
+          let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+            expiresIn: "1h",
+          });
+          return res.status(200).json({
             token: jwtToken,
-            expiresIn: 3600,
-            msg: getUser,
+          });
+        })
+        .catch((err) => {
+          res.status(401).json({
+            message: "Authentication failed",
+          });
         });
-    }).catch((err) => {
-        return res.status(401).json({
-            message: 'Authentication failed',
-        });
-    });
 });
 
 // Sign-in chair
@@ -123,21 +134,21 @@ router.post('/signin-chair', (req,res,next) => {
 });
 
 //Add course by faculty
-router.post('/add-course',(req,res,next)=>{
+router.post('/add-course',(req,res)=>{
     try { 
-        const course = await courseSchema.findOne({ courseCode })
-            if (course) {
-                errors.courseCode = "Given Subject is already added"
-                return res.status(400).json(errors)
+        console.log('course')
+        const course = courseSchema.findOne({courseCode: req.body.courseCode })
+            if (!course) {
+                return res.status(400).json()
             }
         
-        const newCourse = await new courseSchema({
+        const newCourse = new courseSchema({
             
-            courseCode,
-            courseName,
-            offeringFaculty
+            courseCode: req.body.courseCode,
+            courseName: req.body.courseName,
+            offeringFaculty: req.body.offeringFaculty
         })
-        await newCourse.save()
+        newCourse.save()
         
     }
     catch (err) {
@@ -145,7 +156,64 @@ router.post('/add-course',(req,res,next)=>{
     }
 
 });
-
+router.post(
+    "/register-user",
+    (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json(errors.array());
+      } else {
+        bcrypt.hash(req.body.password, 10).then((hash) => {
+          const user = new facultySchema({
+            idno: req.body.idno,
+            password: hash,
+          });
+  
+          user
+            .save()
+            .then((response) => {
+              if (!response) {
+                return res.status(401).json({
+                  message: "Authentication failed",
+                });
+              }
+  
+              //jwt payload
+              payload = {
+                user: {
+                  idno: user.idno,
+                  userId: user._id,
+                },
+              };
+              //jwt signature
+              let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
+                expiresIn: "1h",
+              });
+              //Send authorization token
+              return res.status(200).json({
+                token: jwtToken,
+              });
+            })
+  
+            .catch((error) => {
+              res.status(500).json({
+                error: error,
+              });
+              console.log(error);
+            });
+        });
+      }
+    }
+  );
+  router.route("/course-list").get((req, res) => {
+    courseSchema.find((error, response) => {
+      if (error) {
+        return next(error);
+      } else {
+        res.status(200).json(response);
+      }
+    });
+  });
 
 
 module.exports=router;
