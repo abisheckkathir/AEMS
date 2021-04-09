@@ -8,6 +8,10 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
+import DeleteIcon from "@material-ui/icons/Delete";
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+
+
 
 const CustomerListToolbar = (props) => (
   <Box {...props}>
@@ -17,17 +21,22 @@ const CustomerListToolbar = (props) => (
         justifyContent: 'flex-end'
       }}
     >
-      <Button>
-        Import
-      </Button>
-      <Button sx={{ mx: 1 }}>
-        Export
+      <Button
+        variant="contained"
+        color="primary"
+        style={{marginRight: 10}}
+        // onClick={handleClickOpen}
+        startIcon={<AddCircleRoundedIcon />}
+      >
+        Add Course
       </Button>
       <Button
-        color="primary"
         variant="contained"
+        color="secondary"
+        // onClick={deleteCourse}
+        startIcon={<DeleteIcon />}
       >
-        Add customer
+        Delete Course
       </Button>
     </Box>
     <Box sx={{ mt: 3 }}>
@@ -48,7 +57,7 @@ const CustomerListToolbar = (props) => (
                   </InputAdornment>
                 )
               }}
-              placeholder="Search customer"
+              placeholder="Search course"
               variant="outlined"
             />
           </Box>

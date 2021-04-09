@@ -4,6 +4,9 @@ import {
   Container,
   Grid
 } from '@material-ui/core';
+import { connect } from "react-redux";
+
+import { addCourse, courses, refreshRows } from "../actions/action.auth";
 import Budget from 'src/components/dashboard//Budget';
 import LatestOrders from 'src/components/dashboard//LatestOrders';
 import LatestProducts from 'src/components/dashboard//LatestProducts';
@@ -13,7 +16,10 @@ import TotalCustomers from 'src/components/dashboard//TotalCustomers';
 import TotalProfit from 'src/components/dashboard//TotalProfit';
 import TrafficByDevice from 'src/components/dashboard//TrafficByDevice';
 
-const Dashboard = () => (
+function Dashboard({refreshRows,isAuthenticated,courseLoaded }){
+  console.log("abc");
+  refreshRows();
+  return(
   <>
     <Helmet>
       <title>Dashboard | Material Kit</title>
@@ -106,6 +112,15 @@ const Dashboard = () => (
       </Container>
     </Box>
   </>
-);
+);}
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    courseLoaded: state.auth.courseLoaded,
+    // coursesData: state.auth.coursesData,
 
-export default Dashboard;
+
+  };
+};
+// export default Dashboard;
+export default connect(mapStateToProps, { refreshRows })(Dashboard);

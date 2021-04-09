@@ -36,7 +36,7 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     <>
       <Helmet>
-        <title>Login |AEMS</title>
+        <title>Login | AEMS</title>
       </Helmet>
       <div style={{
         backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
@@ -60,12 +60,10 @@ const Login = ({ login, isAuthenticated }) => {
               idno: '',
               password: '',
               type: '',
-              dept: '',
             }}
             validationSchema={Yup.object().shape({
               idno: Yup.string().max(10).required('ID is required'),
               password: Yup.string().max(255).required('password is required'),
-              dept: Yup.string().required('Department is required'),
               type: Yup.string().required('User Type is required')
             })}
             onSubmit={(values) => {

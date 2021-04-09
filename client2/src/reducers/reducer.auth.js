@@ -8,12 +8,15 @@ import {
   SIGNUP_SUCESS,
   SIGNUP_FAILED,
   LOGOUT_USER,
+  COURSE_LIST,
 } from "../actions/action.types";
 
 const initialState = {
   access: localStorage.getItem("access"),
   isAuthenticated: null,
+  courseLoaded:false,
   loading: true,
+  coursesData: null,
   user: null,
 };
 
@@ -25,6 +28,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
+
         loading: false,
         user: payload,
       };
@@ -49,6 +53,13 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: null,
       };
+    case COURSE_LIST:
+      return {
+        ...state,
+        courseLoaded:true,
+        coursesData: payload,
+      };
+
     default:
       return state;
   }

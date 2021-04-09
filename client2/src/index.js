@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable quotes */
 import ReactDOM from 'react-dom';

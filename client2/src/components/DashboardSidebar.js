@@ -19,6 +19,7 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
+  BookOpen as BookOpen,
   Users as UsersIcon
 } from 'react-feather';
 
@@ -51,9 +52,9 @@ const authitems = [
     title: 'Dashboard'
   },
   {
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
+    href: '/app/courses',
+    icon: BookOpen,
+    title: 'Courses'
   },
   {
     href: '/app/products',

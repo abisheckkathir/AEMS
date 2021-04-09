@@ -21,6 +21,7 @@ router.get("/", auth, async (req, res) => {
   });
 // Sign-in student
 router.post('/signin-student', (req,res,next) => {
+  console.log("entered backend signin");
   let getUser;
   studentSchema.findOne({ idno: req.body.idno }).then((user) => {
       if(!user) {
@@ -60,6 +61,8 @@ router.post('/signin-student', (req,res,next) => {
 
 // Sign-in faculty
 router.post('/signin-faculty', (req,res,next) => {
+  console.log("entered backend signin");
+
     let getUser;
     facultySchema.findOne({ idno: req.body.idno }).then((user) => {
         if(!user) {
@@ -169,6 +172,7 @@ router.post(
         bcrypt.hash(req.body.password, 10).then((hash) => {
           const user = new facultySchema({
             idno: req.body.idno,
+            dept: req.body.dept,
             password: hash,
           });
   
@@ -218,6 +222,7 @@ router.post(
         bcrypt.hash(req.body.password, 10).then((hash) => {
           const user = new studentSchema({
             idno: req.body.idno,
+            dept: req.body.dept,
             password: hash,
           });
   
@@ -267,6 +272,7 @@ router.post(
         bcrypt.hash(req.body.password, 10).then((hash) => {
           const user = new chairSchema({
             idno: req.body.idno,
+            dept: req.body.dept,
             password: hash,
           });
   
@@ -309,7 +315,10 @@ router.post(
   router.route("/course-list").get((req, res) => {
     courseSchema.find((error, response) => {
       if (error) {
-        return next(error);
+        
+        return res.status(401).json({
+          message: "Authentication failed",
+        });
       } else {
         res.status(200).json(response);
       }
@@ -321,7 +330,6 @@ router.post(
     var idarr = req.params.ids.split(",");
     courseSchema.deleteMany({'courseCode':{'$in':idarr}}, (error, data) => {
       if (error) {
-        console.log(error);
         return next(error);
       } else {
         console.log(data);

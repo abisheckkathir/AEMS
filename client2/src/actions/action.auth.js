@@ -8,7 +8,7 @@ import {
   SIGNUP_SUCESS,
   LOGOUT_USER,
   COURSE_ADDED,
-  // COURSE_LIST,
+  COURSE_LIST,
   COURSEADD_FAILED,
 } from './action.types';
 /* eslint-disable */
@@ -16,10 +16,12 @@ import setAuthToken from '../utils/setAuthToken';
 
 // export const abc=123;
 export var courses;
-export async function refreshRows() {
+export const refreshRows = () => async (dispatch) => {
+  console.log("action")
+  try {
   const res = axios.get('http://localhost:8080/api/auth/course-list')
     .then(res => {
-      // console.log(JSON.stringify(res.data));
+      console.log(res);
       let jsonObj = JSON.stringify(res.data);
       if (jsonObj.length > 2) {
         jsonObj = '{"courses":' + jsonObj + '}'
@@ -47,7 +49,14 @@ export async function refreshRows() {
         // console.log(persons)
       }
     });
-}
+    dispatch({
+      type: COURSE_LIST,
+      payload: res,
+    });}catch (e) {
+      console.log(e);
+    }
+
+};
 
 //Action checks for authentication 
 
@@ -70,7 +79,7 @@ export const checkAuthenticated = () => async (dispatch) => {
   }
 };
 
-export const login = (idno, password, type) => async (dispatch) => {
+export const login = (idno,type, password) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -97,14 +106,14 @@ export const login = (idno, password, type) => async (dispatch) => {
   }
 };
 
-export const signup = (idno, name, password, type) => async (dispatch) => {
+export const signup = (idno, name,dept, type,password) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  const body = JSON.stringify({ idno, name, password });
+  const body = JSON.stringify({ idno, name,dept, password });
 
   try {
     console.log(body);

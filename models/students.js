@@ -8,6 +8,10 @@ let studentSchema=new Schema({
         unique: true,
         required: true,
     },
+    dept: {
+        type: String,
+        required: true
+    },
     password: {
         type: String,
         required: true
