@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import {  useNavigate } from 'react-router-dom';
+
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { logout } from '../actions/action.auth';
+
 import {
   AppBar,
   Badge,
@@ -16,7 +20,12 @@ import Logo from './Logo';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    navigate('/app/logout', { replace: true });
+
+  };
   return (
     <AppBar
       elevation={0}
@@ -37,7 +46,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={handleLogout}>
             <InputIcon />
           </IconButton>
         </Hidden>
@@ -59,3 +68,4 @@ DashboardNavbar.propTypes = {
 };
 
 export default DashboardNavbar;
+

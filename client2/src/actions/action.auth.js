@@ -21,7 +21,7 @@ export const refreshRows = () => async (dispatch) => {
   try {
   const res = axios.get('http://localhost:8080/api/auth/course-list')
     .then(res => {
-      console.log(res);
+      // console.log(res);
       let jsonObj = JSON.stringify(res.data);
       if (jsonObj.length > 2) {
         jsonObj = '{"courses":' + jsonObj + '}'

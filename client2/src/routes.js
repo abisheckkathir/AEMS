@@ -5,11 +5,13 @@ import Account from 'src/pages/Account';
 import Courses from 'src/pages/Courses';
 import Dashboard from 'src/pages/Dashboard';
 import Login from 'src/pages/Login';
+import Logoutpage from 'src/pages/Logoutpage';
+
 import NotFound from 'src/pages/NotFound';
 import ProductList from 'src/pages/ProductList';
 import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
-
+ 
 const routes = [
   {
     path: 'app',
@@ -17,6 +19,7 @@ const routes = [
     children: [
       { path: 'account', element: <Account /> },
       { path: 'courses', element: <Courses /> },
+      { path: 'logout', element: <Logoutpage /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
       { path: 'settings', element: <Settings /> },
@@ -30,7 +33,7 @@ const routes = [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Navigate to="/login" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }
