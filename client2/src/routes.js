@@ -1,17 +1,17 @@
 import { Navigate } from 'react-router-dom';
-import DashboardLayout from 'src/components/DashboardLayout';
-import MainLayout from 'src/components/MainLayout';
-import Account from 'src/pages/Account';
-import Courses from 'src/pages/Courses';
-import Dashboard from 'src/pages/Dashboard';
-import Login from 'src/pages/Login';
-import Logoutpage from 'src/pages/Logoutpage';
+import DashboardLayout from './components/DashboardLayout';
+import MainLayout from './components/MainLayout';
+import Account from './pages/Account';
+import Courses from './pages/Courses';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Logoutpage from './pages/Logoutpage';
 
-import NotFound from 'src/pages/NotFound';
-import ProductList from 'src/pages/ProductList';
-import Register from 'src/pages/Register';
-import Settings from 'src/pages/Settings';
- 
+import NotFound from './pages/NotFound';
+import ProductList from './pages/ProductList';
+import Register from './pages/Register';
+import Settings from './pages/Settings';
+
 const routes = [
   {
     path: 'app',

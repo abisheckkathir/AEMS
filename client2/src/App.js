@@ -2,10 +2,10 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { useRoutes } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core';
-import GlobalStyles from 'src/components/GlobalStyles';
-import 'src/mixins/chartjs';
-import theme from 'src/theme';
-import routes from 'src/routes';
+import GlobalStyles from './components/GlobalStyles';
+import './mixins/chartjs';
+import theme from './theme';
+import routes from './routes';
 import store from './store';
 
 import { checkAuthenticated } from './actions/action.auth';
