@@ -20,4 +20,4 @@ driver.get('http://localhost:3000/login')
 
 #Now in login page
 login_faculty('faculty1','1234567')
-
+driver.get('http://localhost:3000/app/courses')
