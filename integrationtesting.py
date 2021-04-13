@@ -1,4 +1,5 @@
 from selenium import webdriver
+import time
 
 def login_faculty(username,password):
     id_input=driver.find_element_by_xpath('//*[@id="root"]/div/div/div/div/div/div/div/form/div/div[2]/div/input')
@@ -20,4 +21,20 @@ driver.get('http://localhost:3000/login')
 
 #Now in login page
 login_faculty('faculty1','1234567')
+time.sleep(10)
 driver.get('http://localhost:3000/app/courses')
+add_course=driver.find_element_by_xpath('//*[@id="root"]/div/div/div/div/div/div/div/div[1]/div[1]/button[1]')
+add_course.click()
+time.sleep(2)
+course_code=driver.find_element_by_xpath('//*[@id="courseCode"]')
+course_code.send_keys('555')
+course_name=driver.find_element_by_xpath('//*[@id="courseName"]')
+course_name.send_keys('Software Engineering')
+course_submit=driver.find_element_by_xpath('/html/body/div[2]/div[3]/div/div[3]/button[2]')
+course_submit.click()
+time.sleep(5)
+delete_checkbox=driver.find_element_by_xpath('//*[@id="root"]/div/div/div/div/div/div/div/div[2]/div/div/div[1]/div/div[2]/div[2]/div/div/div/div/div/div[5]/div[1]/span/span[1]/input')
+delete_checkbox.click()
+time.sleep(2)
+delete_button=driver.find_element_by_xpath('//*[@id="root"]/div/div/div/div/div/div/div/div[1]/div[1]/button[2]')
+delete_button.click()
