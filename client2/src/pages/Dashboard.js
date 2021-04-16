@@ -21,8 +21,8 @@ function Dashboard({refreshRows,isAuthenticated,courseLoaded }){
   refreshRows();
   return(
   <>
-    <Helmet>
-      <title>Dashboard | Material Kit</title>
+    <Helmet>Kit
+      <title>Dashboard | AEMS</title>
     </Helmet>
     <Box
       sx={{

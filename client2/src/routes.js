@@ -2,7 +2,8 @@ import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
-import Courses from './pages/Courses';
+import CoursesF from './pages/faculty/Courses';
+import CoursesC from './pages/chair/Courses';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Logoutpage from './pages/Logoutpage';
@@ -18,7 +19,8 @@ const routes = [
     element: <DashboardLayout />,
     children: [
       { path: 'account', element: <Account /> },
-      { path: 'courses', element: <Courses /> },
+      { path: 'faculty/courses', element: <CoursesF /> },
+      { path: 'chair/courses', element: <CoursesC /> },
       { path: 'logout', element: <Logoutpage /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },

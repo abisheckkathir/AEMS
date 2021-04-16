@@ -24,28 +24,47 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case COURSE_LIST:
+      return {
+        ...state,
+        courseLoaded:true,
+        coursesData: payload,
+      };
     case AUTHENTICATION_SUCESS:
       return {
         ...state,
         isAuthenticated: true,
 
         loading: false,
-        user: payload,
+        // user: payload.user,
       };
     case SIGNUP_SUCESS:
     case LOGIN_SUCESS:
       localStorage.setItem("access", payload.token);
+      localStorage.setItem("user",JSON.stringify(payload.user))
+      localStorage.setItem("type",payload.userType)
+      console.log(payload.user);
       return {
         ...state,
         isAuthenticated: true,
         access: payload.token,
+        user: payload.user,
         loading: false,
       };
     case LOGIN_FAILED:
+      console.log("LOGIN_FAILED");
     case SIGNUP_FAILED:
+      console.log("SIGNUP_FAILED");
+
     case LOGOUT_USER:
+      console.log("LOGOUT_USER");
+
     case AUTHENTICATION_FAILED:
+      console.log("AUTHENTICATION_FAILED");
+
       localStorage.removeItem("access");
+      localStorage.removeItem("usertype");
+      localStorage.removeItem("idno");
       return {
         ...state,
         access: null,
@@ -53,12 +72,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: null,
       };
-    case COURSE_LIST:
-      return {
-        ...state,
-        courseLoaded:true,
-        coursesData: payload,
-      };
+   
 
     default:
       return state;

@@ -3,3 +3,4 @@ config/config.env
 test/unit_test.js
 package-lock.json
 yarn.lock
+client2/yarn.lock

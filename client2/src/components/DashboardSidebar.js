@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import {
   Avatar,
   Box,
@@ -24,13 +25,8 @@ import {
 } from 'react-feather';
 
 import NavItem from './NavItem';
-
-const a = true;
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
+const type=localStorage.getItem("type");
+const user = JSON.parse(localStorage.getItem("user"));
 
 const guestitems = [
   {
@@ -44,23 +40,61 @@ const guestitems = [
     title: 'Register'
   }
 ];
-
-const authitems = [
+const facitems = [
   {
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'Dashboard'
   },
   {
-    href: '/app/courses',
+    href: '/app/faculty/courses',
     icon: BookOpen,
     title: 'Courses'
   },
-  // {
-  //   href: '/app/products',
-  //   icon: ShoppingBagIcon,
-  //   title: 'Products'
-  // },
+  {
+    href: '/app/account',
+    icon: UserIcon,
+    title: 'Account'
+  },
+  {
+    href: '/app/settings',
+    icon: SettingsIcon,
+    title: 'Settings'
+  }
+];
+const chairitems = [
+  {
+    href: '/app/dashboard',
+    icon: BarChartIcon,
+    title: 'Dashboard'
+  },
+  {
+    href: '/app/chair/courses',
+    icon: BookOpen,
+    title: 'Courses'
+  },
+  {
+    href: '/app/account',
+    icon: UserIcon,
+    title: 'Account'
+  },
+  {
+    href: '/app/settings',
+    icon: SettingsIcon,
+    title: 'Settings'
+  }
+];
+const studitems = [
+  {
+    href: '/app/dashboard',
+    icon: BarChartIcon,
+    title: 'Dashboard'
+  },
+  {
+    href: '/app/student/courses',
+    icon: BookOpen,
+    title: 'Courses'
+  },
   {
     href: '/app/account',
     icon: UserIcon,
@@ -73,7 +107,22 @@ const authitems = [
   }
 ];
 
+var items;
+switch(type) {
+  case "faculty":
+   items = facitems;
+   break;
+  case "chair":
+    items = chairitems;
+    break;
+  case "student":
+    items = studitems;
+    break;
+  default:
+   items = guestitems;
+}
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+  console.log(user)
   const location = useLocation();
 
   useEffect(() => {
@@ -100,7 +149,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={AccountCircleTwoToneIcon}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -118,13 +167,19 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {user.dept.toUpperCase()}
+        </Typography>
+        <Typography
+          color="textSecondary"
+          variant="body2"
+        >
+          {type[0].toUpperCase() + type.substr(1).toLowerCase()}
         </Typography>
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>
         <List>
-          {(a ? authitems : guestitems).map((item) => (
+          {items.map((item) => (
             <NavItem
               href={item.href}
               key={item.title}

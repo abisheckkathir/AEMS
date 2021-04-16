@@ -17,21 +17,30 @@ import setAuthToken from '../utils/setAuthToken';
 // export const abc=123;
 export var courses;
 export const refreshRows = () => async (dispatch) => {
+  var fid=localStorage.getItem("idno");
+  if (localStorage.getItem("type")!="faculty"){
+    fid="";
+  }
   console.log("action")
   try {
-  const res = axios.get('http://localhost:8080/api/auth/course-list')
+  const res = axios.get('http://localhost:8080/api/auth/course-list',{ params: { offeringFaculty:fid } })
     .then(res => {
+      console.log(fid);
       // console.log(res);
       let jsonObj = JSON.stringify(res.data);
+      
       if (jsonObj.length > 2) {
         jsonObj = '{"courses":' + jsonObj + '}'
-        console.log(jsonObj)
+        // console.log(jsonObj)
         var js = JSON.parse(jsonObj);
-        var x;
         for (let i in js.courses) {
+          // if (js.courses[i].offeringFaculty!=fid){
+          //   js.courses.splice
+          //   continue;
+          // }
           delete js.courses[i]._id;
           delete js.courses[i].__v;
-          delete js.courses[i].offeringFaculty;
+          // delete js.courses[i].offeringFaculty;
           js.courses[i].id = js.courses[i].courseCode
           delete js.courses[i].courseCode;
 
@@ -67,15 +76,18 @@ export const checkAuthenticated = () => async (dispatch) => {
 
   try {
     const res = await axios.get("http://localhost:8080/api/auth/");
-    refreshRows();
+    
     dispatch({
       type: AUTHENTICATION_SUCESS,
       payload: res.data,
     });
+    return true;
   } catch (e) {
+    console.log(e);
     dispatch({
       type: AUTHENTICATION_FAILED,
     });
+    return false;
   }
 };
 
@@ -96,6 +108,9 @@ export const login = (idno,type, password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(checkAuthenticated());
+    localStorage.setItem("idno",idno);
+    console.log("done");
+    localStorage.setItem("usertype",type);
     refreshRows();
     console.log("user logged In!");
   } catch (err) {
@@ -124,6 +139,8 @@ export const signup = (idno, name,dept, type,password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(checkAuthenticated());
+    localStorage.setItem("idno",idno);
+    localStorage.setItem("usertype",type);
     console.log("user created!");
   } catch (err) {
     console.log(err)
@@ -132,7 +149,7 @@ export const signup = (idno, name,dept, type,password) => async (dispatch) => {
     });
   }
 };
-export const addCourse = (courseCode, courseName, offeringFaculty) => async (dispatch) => {
+export const addCourse = (courseCode, courseName, offeringFaculty,isApproved) => async (dispatch) => {
   console.log("enteredaddco");
   const config = {
     headers: {
@@ -140,7 +157,7 @@ export const addCourse = (courseCode, courseName, offeringFaculty) => async (dis
     },
   };
 
-  const body = JSON.stringify({ courseCode, courseName, offeringFaculty });
+  const body = JSON.stringify({ courseCode, courseName, offeringFaculty,isApproved });
 
   try {
     console.log(body);

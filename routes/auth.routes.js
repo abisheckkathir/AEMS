@@ -53,6 +53,8 @@ router.post('/signin-student', (req, res, next) => {
     });
     return res.status(200).json({
       token: jwtToken,
+      user:getUser,
+      userType:"student",
     });}
   })
     .catch((err) => {
@@ -94,6 +96,9 @@ router.post('/signin-faculty', (req, res, next) => {
     });
     return res.status(200).json({
       token: jwtToken,
+      user:getUser,
+      userType:"faculty",
+
     });
   })
     .catch((err) => {
@@ -133,6 +138,9 @@ router.post('/signin-chair', (req, res, next) => {
     });
     return res.status(200).json({
       token: jwtToken,
+      user:getUser,
+      userType:"chair",
+
     });
   })
     .catch((err) => {
@@ -154,7 +162,9 @@ router.post('/add-course', (req, res) => {
 
       courseCode: req.body.courseCode,
       courseName: req.body.courseName,
-      offeringFaculty: req.body.offeringFaculty
+      offeringFaculty: req.body.offeringFaculty,
+      isApproved: req.body.isApproved,
+      _id:req.body.courseCode+req.body.courseName+req.body.offeringFaculty,
     })
     newCourse.save().then((response) => {
       console.log('done');
@@ -174,6 +184,7 @@ router.post(
       bcrypt.hash(req.body.password, 10).then((hash) => {
         const user = new facultySchema({
           idno: req.body.idno,
+          name: req.body.name,
           dept: req.body.dept,
           password: hash,
         });
@@ -198,9 +209,13 @@ router.post(
             let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
               expiresIn: "1h",
             });
+            console.log(user);
             //Send authorization token
             return res.status(200).json({
               token: jwtToken,
+              user:user,
+              userType:"faculty",
+
             });
           })
 
@@ -224,6 +239,7 @@ router.post(
       bcrypt.hash(req.body.password, 10).then((hash) => {
         const user = new studentSchema({
           idno: req.body.idno,
+          name: req.body.name,
           dept: req.body.dept,
           password: hash,
         });
@@ -251,6 +267,9 @@ router.post(
             //Send authorization token
             return res.status(200).json({
               token: jwtToken,
+              user:user,
+              userType:"student",
+
             });
           })
 
@@ -274,6 +293,7 @@ router.post(
       bcrypt.hash(req.body.password, 10).then((hash) => {
         const user = new chairSchema({
           idno: req.body.idno,
+          name: req.body.name,
           dept: req.body.dept,
           password: hash,
         });
@@ -301,6 +321,9 @@ router.post(
             //Send authorization token
             return res.status(200).json({
               token: jwtToken,
+              user:user,
+              userType:"chair",
+
             });
           })
 
@@ -315,22 +338,40 @@ router.post(
   }
 );
 router.route("/course-list").get((req, res) => {
-  courseSchema.find((error, response) => {
+  console.log("courselist")
+  if (req.query.offeringFaculty.length==0){
+    courseSchema.find((error, response) => {
+      if (error) {
+  
+        return res.status(401).json({
+          message: "Authentication failed",
+        });
+      } else {
+        // console.log(response)
+        res.status(200).json(response);
+      }
+    });
+  }else{
+  var query = { offeringFaculty: req.query.offeringFaculty };
+  courseSchema.find(query,(error, response) => {
     if (error) {
 
       return res.status(401).json({
         message: "Authentication failed",
       });
     } else {
+      // console.log(response)
       res.status(200).json(response);
     }
   });
+}
 });
 
-router.route("/delete-course/:ids").delete((req, res, next) => {
-  console.log(req.params.ids)
+router.route("/delete-course/:ids/:fid").delete((req, res, next) => {
+  console.log(req.params);
   var idarr = req.params.ids.split(",");
-  courseSchema.deleteMany({ 'courseCode': { '$in': idarr } }, (error, data) => {
+  var fid= req.params.fid.split(",")
+  courseSchema.deleteMany({ 'courseCode': { '$in': idarr },'offeringFaculty': { '$in': fid } }, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
@@ -348,6 +389,51 @@ router.route("/delete-course/:ids").delete((req, res, next) => {
     }
   });
 });
+router.post('/approve-course/:ids', (req, res) => {
+  console.log('approve')
+  var idarr = req.params.ids.split(",");
+  courseSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"Yes"}}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else if (data.deletedCount != 0) {
+      console.log(data);
+      res.status(200).json({
+        msg: data,
+      });
+    }
+    else {
+
+      res.status(500).json({
+        message: "Course not found",
+      });
+
+    }
+  });
+
+});
+router.post('/reject-course/:ids', (req, res) => {
+  console.log('reject')
+  var idarr = req.params.ids.split(",");
+  courseSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"No"}}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else if (data.deletedCount != 0) {
+      console.log(data);
+      res.status(200).json({
+        msg: data,
+      });
+    }
+    else {
+
+      res.status(500).json({
+        message: "Course not found",
+      });
+
+    }
+  });
+
+});
+
 router.route("/delete-faculty/:id").delete((req, res, next) => {
   facultySchema.deleteOne({ 'idno': req.params.id, }, (error, data) => {
     if (error) {

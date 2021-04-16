@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet';
 import React, { Suspense, Spinner } from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import clsx from 'clsx';
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -14,9 +15,9 @@ import { Box, Container,  Card,CardContent,
   InputAdornment,
   SvgIcon} from '@material-ui/core';
 // import CustomerListResults from './components/customer/CustomerListResults';
-import CustomerListToolbar from '../components/customer/CustomerListToolbar';
+import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
 // import customers from './__mocks__/customers';
-import { addCourse, courses, refreshRows,checkAuthenticated } from "../actions/action.auth";
+import { addCourse, courses, refreshRows,checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -31,9 +32,24 @@ const courses2 = JSON.parse('{"courses":[]}');
 const columns = [
   { field: 'id', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
+  { field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
+  clsx("super-app", {
+    negative: params.value=="Yes",
+    positive: params.value=="No"
+  }) },
 ];
 const useStyles = makeStyles((theme) => ({
   root: {
+    "& .super-app.negative": {
+      backgroundColor: "rgba(157, 255, 118, 0.49)",
+      color: "#1a3e72",
+      fontWeight: "600"
+    },
+    "& .super-app.positive": {
+      backgroundColor: "#d47483",
+      color: "#1a3e72",
+      fontWeight: "600"
+    },
     display: "flex"
   },
   backdrop: {
@@ -45,16 +61,17 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   } 
 }));
-function Courses({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,courseLoaded }) {
+function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,courseLoaded }) {
   refreshRows();
-  checkAuthenticated();
+  const facultyid=localStorage.getItem("idno");
   const navigate = useNavigate();
   const [addData, SetAddData] = React.useState({
     courseCode: "",
     courseName: "",
-    offeringFaculty: "faculty1",
+    offeringFaculty: facultyid ,
+    isApproved: "No"
   });
-  const { courseCode, courseName,offeringFaculty } = addData;
+  const { courseCode, courseName,offeringFaculty,isApproved } = addData;
   const onChange = (e) =>
   SetAddData({ ...addData, [e.target.name]: e.target.value });
   const classes = useStyles();
@@ -64,9 +81,10 @@ function Courses({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,cou
 
   const deleteCourse=()=>{
     if (selected.length>0){
+    console.log(facultyid);
     axios
-      .delete(`http://localhost:8080/api/auth/delete-course/${selected}`)
-      .then(data => {
+      .delete(`http://localhost:8080/api/auth/delete-course/${selected}/${facultyid}`)
+      .then(a => {
         refreshRows();
       })
       .catch(err => alert(err));
@@ -81,16 +99,17 @@ function Courses({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,cou
   };
   const handleDone = () => {
     diasetOpen(false);
-    addCourse(courseCode, courseName, offeringFaculty);
+    addCourse(courseCode, courseName, offeringFaculty,isApproved);
     window.location.reload(false);
 
 
   };
-  // if(!isAuthenticated){
-  //   navigate('/login', { replace: false });
+  // console.log(checkAuthenticated());
+  if(!facultyid){
+    navigate('/login', { replace: false });
 
-  // }
-  if (!courseLoaded || courses==null) {
+  }
+  if (!courseLoaded) {
     
     refreshRows();
 
@@ -148,8 +167,7 @@ function Courses({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,cou
       </>
     );
   };
-  
-  if (courseLoaded && courses!=null) {
+  if (courseLoaded ) {
         refreshRows();
 
     console.log(courses);
@@ -281,7 +299,7 @@ function Courses({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,cou
             <Card >
       <PerfectScrollbar>
       <div style={{ height: 400, width: '100%' }}>
-              <DataGrid rows={courses} columns={columns} pageSize={10} checkboxSelection onRowSelected={(param) => {
+              <DataGrid rows={(courses) ? courses:[] } columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
                 console.log("aabbcc");
                 if (param.isSelected) {
                   selected.push(param.data.id);
@@ -321,4 +339,4 @@ const mapStateToProps = (state) => {
 
   };
 };
-export default connect(mapStateToProps, { addCourse,refreshRows,checkAuthenticated })(Courses);
+export default connect(mapStateToProps, { addCourse,refreshRows,checkAuthenticated })(CoursesF);

@@ -5,15 +5,26 @@ const Validator = require('validator');
 const isEmpty = require('./is-empty');
 
 let courseSchema =new Schema({
-    courseName:{
+    _id:{
         type: String,
         unique: true,
+        required: true,
+    },
+    courseName:{
+        type: String,
+        // unique: true,
         required: true,
     },
 
     courseCode:{
         type: String,
-        unique: true,
+        // unique: true,
+        required: true,
+
+    },
+    isApproved:{
+        type: String,
+        // unique: true,
         required: true,
 
     },
