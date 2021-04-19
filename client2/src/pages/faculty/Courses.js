@@ -30,7 +30,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 var selected = [];
 const courses2 = JSON.parse('{"courses":[]}');
 const columns = [
-  { field: 'id', headerName: 'Course Code', width: 200 },
+  { field: 'id', headerName: 'id', width: 200,hide: true },
+  { field: 'courseCode', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
   { field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
   clsx("super-app", {

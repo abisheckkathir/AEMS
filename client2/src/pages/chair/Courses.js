@@ -32,7 +32,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 var selected = [];
 const courses2 = JSON.parse('{"courses":[]}');
 const columns = [
-  { field: 'id', headerName: 'Course Code', width: 200 },
+  { field: 'id', headerName: 'id', width: 200,hide: true },
+  { field: 'courseCode', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
   { field: 'offeringFaculty', headerName: 'Offering Faculty', width: 200 },
   {
@@ -279,11 +280,11 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
                       <DataGrid rows={(courses) ? courses:[]} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
                         console.log("aabbcc");
                         if (param.isSelected) {
-                          selected.push(param.data.id + param.data.courseName + param.data.offeringFaculty);
+                          selected.push(param.data.id);
                         }
                         else {
                           for (let i = 0; i < selected.length; i++) {
-                            if (selected[i] === (param.data.id + param.data.courseName + param.data.offeringFaculty)) {
+                            if (selected[i] === (param.data.id)) {
                               selected.splice(i, 1);
                             }
                           }

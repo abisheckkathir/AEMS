@@ -12,19 +12,19 @@ let courseSchema =new Schema({
     },
     courseName:{
         type: String,
-        // unique: true,
+        unique: false,
         required: true,
     },
 
     courseCode:{
         type: String,
-        // unique: true,
+        unique: false,
         required: true,
 
     },
     isApproved:{
         type: String,
-        // unique: true,
+        unique: false,
         required: true,
 
     },

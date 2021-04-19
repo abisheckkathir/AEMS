@@ -53,11 +53,10 @@ export const refreshRows = () => async (dispatch) => {
           }else{
             pend+=1;
           }
-          delete js.courses[i]._id;
           delete js.courses[i].__v;
           // delete js.courses[i].offeringFaculty;
-          js.courses[i].id = js.courses[i].courseCode
-          delete js.courses[i].courseCode;
+          js.courses[i].id = js.courses[i]._id
+          delete js.courses[i]._id;
 
 
         }
