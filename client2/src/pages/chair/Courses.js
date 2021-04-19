@@ -19,7 +19,7 @@ import {
 // import CustomerListResults from './components/customer/CustomerListResults';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
 // import customers from './__mocks__/customers';
-import { addCourse, courses, refreshRows, checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, courses, refreshRows, reset,checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -39,7 +39,8 @@ const columns = [
     field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
       clsx("super-app", {
         negative: params.value=="Yes",
-        positive: params.value=="No"
+        positive: params.value=="No",
+        neutral: params.value=="Pending"
       })
   },
 ];
@@ -60,6 +61,11 @@ const useStyles = makeStyles((theme) => ({
       color: "#1a3e72",
       fontWeight: "600"
     },
+    "& .super-app.neutral": {
+      backgroundColor: "rgba(224, 183, 60, 0.55)",
+      color: "#1a3e72",
+      fontWeight: "600"
+    },
     display: "flex"
   },
   backdrop: {
@@ -71,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   }
 }));
-function CoursesC({ addCourse, refreshRows, checkAuthenticated, isAuthenticated, courseLoaded }) {
+function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenticated, courseLoaded }) {
   refreshRows();
   const facultyid = localStorage.getItem("idno");
   const navigate = useNavigate();
@@ -311,4 +317,4 @@ const mapStateToProps = (state) => {
 
   };
 };
-export default connect(mapStateToProps, { addCourse, refreshRows, checkAuthenticated })(CoursesC);
+export default connect(mapStateToProps, { addCourse, refreshRows,reset, checkAuthenticated })(CoursesC);

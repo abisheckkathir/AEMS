@@ -6,20 +6,20 @@ import {
   Grid,
   Typography
 } from '@material-ui/core';
+import {appr} from "../../actions/action.auth";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
-import { red } from '@material-ui/core/colors';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import { green } from '@material-ui/core/colors';
 
 const Budget = (props) => (
   <Card
-    sx={{ height: '100%' }}
     {...props}
   >
     <CardContent>
       <Grid
         container
         spacing={3}
-        sx={{ justifyContent: 'space-between' }}
+        sx={{ justifyContent: 'space-between'}}
       >
         <Grid item>
           <Typography
@@ -27,51 +27,27 @@ const Budget = (props) => (
             gutterBottom
             variant="h6"
           >
-            BUDGET
+            APPROVED COURSES
           </Typography>
           <Typography
             color="textPrimary"
             variant="h3"
           >
-            $24,000
+            {appr}
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             sx={{
-              backgroundColor: red[600],
+              backgroundColor: green[600],
               height: 56,
               width: 56
             }}
           >
-            <MoneyIcon />
+            <ThumbUpOutlinedIcon />
           </Avatar>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          pt: 2,
-          display: 'flex',
-          alignItems: 'center'
-        }}
-      >
-        <ArrowDownwardIcon sx={{ color: red[900] }} />
-        <Typography
-          sx={{
-            color: red[900],
-            mr: 1
-          }}
-          variant="body2"
-        >
-          12%
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="caption"
-        >
-          Since last month
-        </Typography>
-      </Box>
     </CardContent>
   </Card>
 );

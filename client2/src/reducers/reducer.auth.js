@@ -9,6 +9,7 @@ import {
   SIGNUP_FAILED,
   LOGOUT_USER,
   COURSE_LIST,
+  COURSE_FAIL,
 } from "../actions/action.types";
 
 const initialState = {
@@ -28,6 +29,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         courseLoaded:true,
+        coursesData: payload,
+      };
+    case COURSE_FAIL:
+      return {
+        ...state,
+        courseLoaded:false,
         coursesData: payload,
       };
     case AUTHENTICATION_SUCESS:

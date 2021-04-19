@@ -6,9 +6,10 @@ import {
   Grid,
   Typography
 } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
+import {rej } from "../../actions/action.auth";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 
 const TotalCustomers = (props) => (
   <Card {...props}>
@@ -24,51 +25,27 @@ const TotalCustomers = (props) => (
             gutterBottom
             variant="h6"
           >
-            TOTAL CUSTOMERS
+            REJECTED COURSES
           </Typography>
           <Typography
             color="textPrimary"
             variant="h3"
           >
-            1,600
+            {rej}
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             sx={{
-              backgroundColor: green[600],
+              backgroundColor: red[900],
               height: 56,
               width: 56
             }}
           >
-            <PeopleIcon />
+            <ThumbDownOutlinedIcon />
           </Avatar>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          pt: 2
-        }}
-      >
-        <ArrowUpwardIcon sx={{ color: green[900] }} />
-        <Typography
-          variant="body2"
-          sx={{
-            color: green[900],
-            mr: 1
-          }}
-        >
-          16%
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="caption"
-        >
-          Since last month
-        </Typography>
-      </Box>
     </CardContent>
   </Card>
 );

@@ -8,11 +8,10 @@ import {
   Typography
 } from '@material-ui/core';
 import { orange } from '@material-ui/core/colors';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
-
+import {pend} from "../../actions/action.auth";
+import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
 const TasksProgress = (props) => (
   <Card
-    sx={{ height: '100%' }}
     {...props}
   >
     <CardContent>
@@ -27,13 +26,13 @@ const TasksProgress = (props) => (
             gutterBottom
             variant="h6"
           >
-            TASKS PROGRESS
+            PENDING COURSES
           </Typography>
           <Typography
             color="textPrimary"
             variant="h3"
           >
-            75.5%
+            {pend}
           </Typography>
         </Grid>
         <Grid item>
@@ -44,16 +43,10 @@ const TasksProgress = (props) => (
               width: 56
             }}
           >
-            <InsertChartIcon />
+            <TimerOutlinedIcon />
           </Avatar>
         </Grid>
       </Grid>
-      <Box sx={{ pt: 3 }}>
-        <LinearProgress
-          value={75.5}
-          variant="determinate"
-        />
-      </Box>
     </CardContent>
   </Card>
 );

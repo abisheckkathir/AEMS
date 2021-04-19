@@ -6,7 +6,8 @@ import {
   Typography
 } from '@material-ui/core';
 import { indigo } from '@material-ui/core/colors';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import {pend,appr,rej} from "../../actions/action.auth";
+import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 
 const TotalProfit = (props) => (
   <Card {...props}>
@@ -22,13 +23,13 @@ const TotalProfit = (props) => (
             gutterBottom
             variant="h6"
           >
-            TOTAL PROFIT
+            TOTAL COURSES
           </Typography>
           <Typography
             color="textPrimary"
             variant="h3"
           >
-            $23,200
+            {pend+rej+appr}
           </Typography>
         </Grid>
         <Grid item>
@@ -39,7 +40,7 @@ const TotalProfit = (props) => (
               width: 56
             }}
           >
-            <AttachMoneyIcon />
+            <BookOutlinedIcon />
           </Avatar>
         </Grid>
       </Grid>

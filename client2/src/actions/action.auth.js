@@ -9,6 +9,7 @@ import {
   LOGOUT_USER,
   COURSE_ADDED,
   COURSE_LIST,
+  COURSE_FAIL,
   COURSEADD_FAILED,
 } from './action.types';
 /* eslint-disable */
@@ -16,6 +17,10 @@ import setAuthToken from '../utils/setAuthToken';
 
 // export const abc=123;
 export var courses;
+export var appr=0;
+export var rej=0;
+export var pend=0;
+
 export const refreshRows = () => async (dispatch) => {
   var fid=localStorage.getItem("idno");
   if (localStorage.getItem("type")!="faculty"){
@@ -27,6 +32,9 @@ export const refreshRows = () => async (dispatch) => {
     .then(res => {
       console.log(fid);
       // console.log(res);
+      appr=0;
+      rej=0;
+      pend=0;
       let jsonObj = JSON.stringify(res.data);
       
       if (jsonObj.length > 2) {
@@ -38,6 +46,13 @@ export const refreshRows = () => async (dispatch) => {
           //   js.courses.splice
           //   continue;
           // }
+          if (js.courses[i].isApproved=="Yes"){
+            appr+=1;
+          }else if (js.courses[i].isApproved=="No") {
+            rej+=1;
+          }else{
+            pend+=1;
+          }
           delete js.courses[i]._id;
           delete js.courses[i].__v;
           // delete js.courses[i].offeringFaculty;
@@ -201,5 +216,10 @@ export const addCourse = (courseCode, courseName, offeringFaculty,isApproved) =>
 export const logout = () => (dispatch) => {
   dispatch({
     type: LOGOUT_USER,
+  });
+};
+export const reset = () => (dispatch) => {
+  dispatch({
+    type: COURSE_FAIL,
   });
 };

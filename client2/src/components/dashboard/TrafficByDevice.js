@@ -9,9 +9,11 @@ import {
   colors,
   useTheme
 } from '@material-ui/core';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import PhoneIcon from '@material-ui/icons/Phone';
-import TabletIcon from '@material-ui/icons/Tablet';
+import {pend,appr,rej} from "../../actions/action.auth";
+import TimerOutlinedIcon from '@material-ui/icons/TimerOutlined';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
+
 
 const TrafficByDevice = (props) => {
   const theme = useTheme();
@@ -19,10 +21,10 @@ const TrafficByDevice = (props) => {
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
+        data: [appr, rej, pend],
         backgroundColor: [
-          colors.indigo[500],
-          colors.red[600],
+          colors.green[600],
+          colors.red[900],
           colors.orange[600]
         ],
         borderWidth: 8,
@@ -30,7 +32,7 @@ const TrafficByDevice = (props) => {
         hoverBorderColor: colors.common.white
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['Approved', 'Rejected', 'Pending']
   };
 
   const options = {
@@ -57,28 +59,28 @@ const TrafficByDevice = (props) => {
 
   const devices = [
     {
-      title: 'Desktop',
-      value: 63,
-      icon: LaptopMacIcon,
-      color: colors.indigo[500]
+      title: 'Approved',
+      value: appr/(appr+pend+rej)*100,
+      icon: ThumbUpOutlinedIcon,
+      color: colors.green[600]
     },
     {
-      title: 'Tablet',
-      value: 15,
-      icon: TabletIcon,
-      color: colors.red[600]
+      title: 'Rejected',
+      value: rej/(appr+pend+rej)*100,
+      icon: ThumbDownOutlinedIcon,
+      color: colors.red[900]
     },
     {
-      title: 'Mobile',
-      value: 23,
-      icon: PhoneIcon,
+      title: 'Pending',
+      value: pend/(appr+pend+rej)*100,
+      icon: TimerOutlinedIcon,
       color: colors.orange[600]
     }
   ];
 
   return (
     <Card {...props}>
-      <CardHeader title="Traffic by Device" />
+      <CardHeader title="Courses" />
       <Divider />
       <CardContent>
         <Box

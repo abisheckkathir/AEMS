@@ -35,7 +35,8 @@ const columns = [
   { field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
   clsx("super-app", {
     negative: params.value=="Yes",
-    positive: params.value=="No"
+    positive: params.value=="No",
+    neutral: params.value=="Pending"
   }) },
 ];
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .super-app.positive": {
       backgroundColor: "#d47483",
+      color: "#1a3e72",
+      fontWeight: "600"
+    },
+    "& .super-app.neutral": {
+      backgroundColor: "rgba(224, 183, 60, 0.55)",
       color: "#1a3e72",
       fontWeight: "600"
     },
@@ -69,7 +75,7 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
     courseCode: "",
     courseName: "",
     offeringFaculty: facultyid ,
-    isApproved: "No"
+    isApproved: "Pending"
   });
   const { courseCode, courseName,offeringFaculty,isApproved } = addData;
   const onChange = (e) =>
