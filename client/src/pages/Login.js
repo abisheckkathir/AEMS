@@ -15,8 +15,10 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../actions/action.auth";
-import { rows } from "./Home";
+import FormLabel from '@material-ui/core/FormLabel';
 
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -55,17 +57,18 @@ function Login({ login, isAuthenticated }) {
   const [loginData, SetLoginData] = useState({
     idno: "",
     password: "",
+    type: "faculty"
   });
 
-  const { idno, password } = loginData;
+  const { idno, password,type } = loginData;
 
   const onChange = (e) =>
     SetLoginData({ ...loginData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(idno, password);
-    login(idno, password);
+    console.log(idno, password,type);
+    login(idno, password,type);
   };
 
   //check authentication
@@ -107,10 +110,12 @@ function Login({ login, isAuthenticated }) {
             autoComplete="current-password"
             onChange={(e) => onChange(e)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          <FormLabel component="legend">Type</FormLabel>
+      <RadioGroup aria-label="type" name="type" value={type} onChange={onChange}>
+        <FormControlLabel value="faculty" control={<Radio />} label="Faculty" />
+        <FormControlLabel value="student" control={<Radio />} label="Student" />
+        <FormControlLabel value="chair" control={<Radio />} label="Chairperson" />
+      </RadioGroup>
           <Button
             type="submit"
             fullWidth
@@ -127,7 +132,7 @@ function Login({ login, isAuthenticated }) {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly enzyme 1`] = `
+<Fragment>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      404 | Material Kit
+    </title>
+  </HelmetWrapper>
+  <ForwardRef(Box)
+    sx={
+      Object {
+        "backgroundColor": "background.default",
+        "display": "flex",
+        "flexDirection": "column",
+        "height": "100%",
+        "justifyContent": "center",
+      }
+    }
+  >
+    <ForwardRef(Container)
+      maxWidth="md"
+    >
+      <ForwardRef(Typography)
+        align="center"
+        color="textPrimary"
+        variant="h1"
+      >
+        404: The page you are looking for isn’t here
+      </ForwardRef(Typography)>
+      <ForwardRef(Typography)
+        align="center"
+        color="textPrimary"
+        variant="subtitle2"
+      >
+        You either tried some shady route or you came here by mistake. Whichever it is, try using the navigation
+      </ForwardRef(Typography)>
+      <ForwardRef(Box)
+        sx={
+          Object {
+            "textAlign": "center",
+          }
+        }
+      >
+        <img
+          alt="Under development"
+          src="/static/images/404.png"
+          style={
+            Object {
+              "display": "inline-block",
+              "marginTop": 50,
+              "maxWidth": "100%",
+              "width": 560,
+            }
+          }
+        />
+      </ForwardRef(Box)>
+    </ForwardRef(Container)>
+  </ForwardRef(Box)>
+</Fragment>
+`;

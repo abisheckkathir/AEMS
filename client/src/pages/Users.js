@@ -218,9 +218,9 @@ function Courses({ addCourse, isAuthenticated }) {
 
 
   };
-  if (courses==null){
-    return <Redirect to="/" />;
-  }
+  // if (courses==null){
+  //   return <Redirect to="/" />;
+  // }
   return (<div className={classes.root}>
     <CssBaseline />
 
@@ -374,20 +374,20 @@ function Courses({ addCourse, isAuthenticated }) {
       </Button>
       <div style={{ height: 20, width: '100%' }}></div>
       <div style={{ height: 600, width: '100%' }}>
-      <DataGrid rows={courses} columns={columns} pageSize={10} checkboxSelection onRowSelected	={(param) => {
+      {/* <DataGrid rows={courses} columns={columns} pageSize={10} checkboxSelection onRowSelected	={(param) => {
                     console.log("aabbcc");
                     if (param.isSelected){
                       selected.push(param.data.id);
                     }
                     else{
                       for (let i = 0; i < selected.length; i++) {
-                        if(selected[i]==param.data.id){
+                        if(selected[i]===param.data.id){
                           selected.splice(i, 1);
                         }
                       }
                     }
                     console.log(selected);
-                }} />
+                }} /> */}
     </div>      </div>
     </Grid>
   </div>);
