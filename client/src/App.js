@@ -1,38 +1,30 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import { useRoutes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { ThemeProvider } from '@material-ui/core';
+import GlobalStyles from './components/GlobalStyles';
+import './mixins/chartjs';
+import theme from './theme';
+import routes from './routes';
+import store from './store';
 
-import Home from "./pages/Home";
-import Routes from "./utils/routing/Routes";
+import { checkAuthenticated } from './actions/action.auth';
+import setAuthToken from './utils/setAuthToken';
 
-import { Provider } from "react-redux";
-import store from "./store";
-
-import Layout from "./hoc/Layout";
-import { check_authenticated } from "./actions/action.auth";
-import setAuthToken from "./utils/setAuthToken";
-
-//Check for token
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
-
 const App = () => {
-  //Setting up token
+  const routing = useRoutes(routes);
   useEffect(() => {
-    store.dispatch(check_authenticated());
+    store.dispatch(checkAuthenticated());
     // eslint-disable-next-line
   }, []);
   return (
-    <Provider store={store}>
-      <Router>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route component={Routes} />
-          </Switch>
-        </Layout>
-      </Router>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      {routing}
+    </ThemeProvider>
   );
 };
 

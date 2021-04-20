@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { combineReducers } from 'redux';
 import auth from './reducer.auth';
 

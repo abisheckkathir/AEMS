@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from "axios";
 //Sets a token to all axios requests
 const setAuthToken = (access) => {

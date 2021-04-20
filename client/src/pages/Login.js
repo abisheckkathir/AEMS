@@ -1,151 +1,187 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable*/
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { Redirect } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 import { connect } from "react-redux";
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import {
+  Box,
+  Button,
+  Container,
+  MenuItem,
+  Grid,
+  FormControlLabel,
+  Link,
+  InputLabel,
+  Select,
+  FormHelperText,
+  FormControl,
+  TextField,
+  Radio,
+  RadioGroup,
+  Typography
+} from '@material-ui/core';
 import { login } from "../actions/action.auth";
-import FormLabel from '@material-ui/core/FormLabel';
 
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Amrita
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-function Login({ login, isAuthenticated }) {
-  const classes = useStyles();
-  const [loginData, SetLoginData] = useState({
-    idno: "",
-    password: "",
-    type: "faculty"
-  });
-
-  const { idno, password,type } = loginData;
-
-  const onChange = (e) =>
-    SetLoginData({ ...loginData, [e.target.name]: e.target.value });
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    console.log(idno, password,type);
-    login(idno, password,type);
-  };
-
-  //check authentication
+const Login = ({ login, isAuthenticated }) => {
+  const navigate = useNavigate();
   if (isAuthenticated) {
-    return <Redirect to="/sample" />;
+    navigate('/app/dashboard', { replace: true });
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} onSubmit={(e) => onSubmit(e)}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Roll Number"
-            name="idno"
-            autoFocus
-            onChange={(e) => onChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => onChange(e)}
-          />
-          <FormLabel component="legend">Type</FormLabel>
-      <RadioGroup aria-label="type" name="type" value={type} onChange={onChange}>
-        <FormControlLabel value="faculty" control={<Radio />} label="Faculty" />
-        <FormControlLabel value="student" control={<Radio />} label="Student" />
-        <FormControlLabel value="chair" control={<Radio />} label="Chairperson" />
-      </RadioGroup>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+    <>
+      <Helmet>
+        <title>Login | AEMS</title>
+      </Helmet>
+      <div style={{
+        backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
+        height: '100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      }}>
+      <Box
+        sx={{
+          // backgroundColor: 'background.default',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          justifyContent: 'center'
+        }}
+      >
+        <Container maxWidth="sm">
+          <Formik
+            initialValues={{
+              idno: '',
+              password: '',
+              type: '',
+            }}
+            validationSchema={Yup.object().shape({
+              idno: Yup.string().max(10).required('ID is required'),
+              password: Yup.string().max(255).required('password is required'),
+              type: Yup.string().required('User Type is required')
+            })}
+            onSubmit={(values) => {
+              login(values.idno, values.type, values.password);
+              console.log(values);
+            }}
           >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <Box bgcolor="white" borderRadius={6} p={5}>
+                <Box sx={{ mb: 3 }}>
+                  <Typography
+                    color="textPrimary"
+                    variant="h2"
+                  >
+                    Sign in
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    gutterBottom
+                    variant="body2"
+                  >
+                    Sign in on the AEMS platform
+                  </Typography>
+                </Box>
+                <TextField
+                  error={Boolean(touched.idno && errors.idno)}
+                  fullWidth
+                  helperText={touched.idno && errors.idno}
+                  label="ID"
+                  margin="normal"
+                  name="idno"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.idno}
+                  variant="outlined"
+                />
+                <FormControl required error={Boolean(touched.type && errors.type)} fullWidth margin="dense" variant="outlined"
+                >
+                  <InputLabel id="typelabel">User Type</InputLabel>
+                  <Select
+                    labelWidth={120}
+                    labelId="type"
+                    id="type"
+                    name="type"
+                    onOpen={handleBlur}
+                    value={values.type}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>Select one</em>
+                    </MenuItem>
+                    <MenuItem value={"faculty"}>Faculty</MenuItem>
+                    <MenuItem value={"student"}>Student</MenuItem>
+                    <MenuItem value={"chair"}>Chairperson</MenuItem>
+                  </Select>
+                  <FormHelperText>{touched.type && errors.type}</FormHelperText>
+                </FormControl>
+                <TextField
+                  error={Boolean(touched.password && errors.password)}
+                  fullWidth
+                  helperText={touched.password && errors.password}
+                  label="Password"
+                  margin="normal"
+                  name="password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="password"
+                  value={values.password}
+                  variant="outlined"
+                />
+                <Box sx={{ py: 2 }}>
+                  <Button
+                    color="primary"
+                    disabled={isSubmitting}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
+                    Sign in now
+                  </Button>
+                </Box>
+                <Typography
+                  color="textSecondary"
+                  variant="body1"
+                >
+                  Don&apos;t have an account?
+                  {' '}
+                  <Link
+                    component={RouterLink}
+                    to="/register"
+                    variant="h6"
+                  >
+                    Sign up
+                  </Link>
+                </Typography>
+                </Box>
+              </form>
+            )}
+          </Formik>
+        </Container>
       </Box>
-    </Container>
+      </div>
+    </>
   );
-}
+};
+
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
+
 export default connect(mapStateToProps, { login })(Login);

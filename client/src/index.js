@@ -1,11 +1,19 @@
-import React from 'react';
+/* eslint-disable react/jsx-indent */
+/* eslint-disable quotes */
 import ReactDOM from 'react-dom';
-import App from './App';
-import '../src/stylesheets/main.scss'
+import { Provider } from "react-redux";
+import store from "./store";
 
-ReactDOM.render(
-  <React.StrictMode>
+import { BrowserRouter } from 'react-router-dom';
+import * as serviceWorker from './serviceWorker';
+import App from './App';
+
+ReactDOM.render((
+  <Provider store={store}>
+  <BrowserRouter>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+  </BrowserRouter>
+  </Provider>
+), document.getElementById('root'));
+
+serviceWorker.unregister();
