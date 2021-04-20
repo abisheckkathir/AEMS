@@ -309,11 +309,11 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
               <DataGrid rows={(courses) ? courses:[] } columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
                 console.log("aabbcc");
                 if (param.isSelected) {
-                  selected.push(param.data.id);
+                  selected.push(param.data.courseCode);
                 }
                 else {
                   for (let i = 0; i < selected.length; i++) {
-                    if (selected[i] === param.data.id) {
+                    if (selected[i] === param.data.courseCode) {
                       selected.splice(i, 1);
                     }
                   }
