@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --reporter spec",
     "start": "nodemon server.js",
     "serve": "nodemon server.js"
   },
@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/aaditya47/SWE-Case-Study#readme",
   "dependencies": {
+    "@fontsource/roboto": "^4.2.2",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
@@ -28,9 +32,15 @@
     "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.0",
-    "mongoose-unique-validator": "^2.0.3"
+    "mongoose-unique-validator": "^2.0.3",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "request": "^2.88.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }
