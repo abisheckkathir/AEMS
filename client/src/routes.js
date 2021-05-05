@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
-import CoursesF from './pages/faculty/Courses';
+import CoursesF from './pages/faculty1/Courses';
 import CoursesC from './pages/chair/Courses';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
