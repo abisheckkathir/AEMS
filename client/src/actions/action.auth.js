@@ -20,13 +20,17 @@ export var courses;
 export var appr=0;
 export var rej=0;
 export var pend=0;
-
+var dict;
 export const refreshRows = () => async (dispatch) => {
-  var fid=localStorage.getItem("idno");
+  var user=localStorage.getItem("idno");
+  var fid=user
+  if(!fid){
+    window.location.reload(false);
+  }
   if (localStorage.getItem("type")!="faculty"){
     fid="";
   }
-  console.log("action")
+  console.log(fid)
   try {
   const res = axios.get('http://localhost:8080/api/auth/course-list',{ params: { offeringFaculty:fid } })
     .then(res => {
@@ -69,12 +73,16 @@ export const refreshRows = () => async (dispatch) => {
         // // delete jsonObj.oferringFaculty;
         // // delete jsonObj.__v;
         courses = JSON.parse(jso);
+        if (!(courses)){
+            courses=[];
+        }
         // console.log(persons)
       }
+      dict = {"courses":courses,"appr":appr,"rej":rej,"pend":pend};
     });
     dispatch({
       type: COURSE_LIST,
-      payload: res,
+      payload: dict,
     });}catch (e) {
       console.log(e);
     }
@@ -190,27 +198,6 @@ export const addCourse = (courseCode, courseName, offeringFaculty,isApproved) =>
     });
   }
 };
-// export const courseList = () => async (dispatch) => {
-//   const config = {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   };
-
-//   try {
-
-//     const res = await axios.get("api/auth/course-list");
-//     dispatch({
-//       type: COURSE_LIST,
-//       payload: res.data,
-//     });
-//   } catch (err) {
-//     console.log(err)
-//     dispatch({
-//       type: COURSEADD_FAILED,
-//     });
-//   }
-// };
 
 export const logout = () => (dispatch) => {
   dispatch({

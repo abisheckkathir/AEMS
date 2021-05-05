@@ -7,6 +7,7 @@ const studentSchema = require('../models/students');
 const facultySchema = require('../models/faculty');
 const chairSchema = require('../models/chairperson');
 const courseSchema = require('../models/course');
+const assignSchema = require('../models/assignedCourses');
 const auth = require("../middlewares/auth");
 const { check, validationResult } = require('express-validator');
 
@@ -496,6 +497,35 @@ router.route("/delete-chair/:id").delete((req, res, next) => {
 
     }
   });
+});
+router.route("/assign-list").get((req, res) => {
+  console.log("assignlist")
+  if (req.query.studentID.length==0){
+    assignSchema.find((error, response) => {
+      if (error) {
+  
+        return res.status(401).json({
+          message: "Authentication failed",
+        });
+      } else {
+        // console.log(response)
+        res.status(200).json(response);
+      }
+    });
+  }else{
+  var query = { studentID: req.query.studentID };
+  assignSchema.find(query,(error, response) => {
+    if (error) {
+
+      return res.status(401).json({
+        message: "Authentication failed",
+      });
+    } else {
+      // console.log(response)
+      res.status(200).json(response);
+    }
+  });
+}
 });
 module.exports = router;
 

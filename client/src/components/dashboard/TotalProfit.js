@@ -6,46 +6,92 @@ import {
   Typography
 } from '@material-ui/core';
 import { indigo } from '@material-ui/core/colors';
-import {pend,appr,rej} from "../../actions/action.auth";
+import { pend, appr, rej } from "../../actions/action.auth";
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { connect } from "react-redux";
 
-const TotalProfit = (props) => (
-  <Card {...props}>
-    <CardContent>
-      <Grid
-        container
-        spacing={3}
-        sx={{ justifyContent: 'space-between' }}
-      >
-        <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="h6"
+const TotalProfit = (props, { courseLoaded, coursesData }) => {
+  if (props.coursesData) {
+    return (
+      <Card {...props}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            sx={{ justifyContent: 'space-between' }}
           >
-            TOTAL COURSES
+            <Grid item>
+              <Typography
+                color="textSecondary"
+                gutterBottom
+                variant="h6"
+              >
+                TOTAL COURSES
           </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h3"
+              <Typography
+                color="textPrimary"
+                variant="h3"
+              >
+                {props.coursesData.appr + props.coursesData.rej + props.coursesData.pend}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{
+                  backgroundColor: indigo[600],
+                  height: 56,
+                  width: 56
+                }}
+              >
+                <BookOutlinedIcon />
+              </Avatar>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    )
+  }else{
+    return (
+      <Card {...props}>
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            sx={{ justifyContent: 'space-between' }}
           >
-            {pend+rej+appr}
+            <Grid item>
+              <Typography
+                color="textSecondary"
+                gutterBottom
+                variant="h6"
+              >
+                TOTAL COURSES
           </Typography>
-        </Grid>
-        <Grid item>
-          <Avatar
-            sx={{
-              backgroundColor: indigo[600],
-              height: 56,
-              width: 56
-            }}
-          >
-            <BookOutlinedIcon />
-          </Avatar>
-        </Grid>
-      </Grid>
-    </CardContent>
-  </Card>
-);
+          <CircularProgress color="inherit" />
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{
+                  backgroundColor: indigo[600],
+                  height: 56,
+                  width: 56
+                }}
+              >
+                <BookOutlinedIcon />
+              </Avatar>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    )
+  }
+};
 
-export default TotalProfit;
+const mapStateToProps = (state) => {
+  return {
+    courseLoaded: state.auth.courseLoaded,
+    coursesData: state.auth.coursesData,
+  };
+};
+export default connect(mapStateToProps)(TotalProfit);

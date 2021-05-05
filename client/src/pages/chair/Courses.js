@@ -78,13 +78,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   }
 }));
-function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenticated, courseLoaded }) {
+function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenticated,courseLoaded,coursesData }) {
   refreshRows();
   const facultyid = localStorage.getItem("idno");
   const navigate = useNavigate();
-  // const { courseCode, courseName,offeringFaculty,isApproved } = addData;
-  // const onChange = (e) =>
-  // SetAddData({ ...addData, [e.target.name]: e.target.value });
   const classes = useStyles();
   const theme = useTheme();
   // const [diaopen, diasetOpen] = React.useState(false);
@@ -114,18 +111,7 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
       window.location.reload(false);
     }
   };
-  // const handleClose = () => {
-  //   diasetOpen(false);
-  // };
-  // const handleClickOpen = () => {
-  //   diasetOpen(true);
-  // };
-  // const handleDone = () => {
-  //   diasetOpen(false);
-  //   addCourse(courseCode, courseName, offeringFaculty,isApproved);
-  //   window.location.reload(false);
-  // };
-  // console.log(checkAuthenticated());
+
   if (!facultyid) {
     console.log("a" + facultyid);
     navigate('/login', { replace: false });
@@ -133,7 +119,6 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
   }
   if (!courseLoaded) {
 
-    refreshRows();
 
     return (
       <>
@@ -143,17 +128,13 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
 
         <div style={{
           backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
-          // height: '100%',
           backgroundPosition: 'center',
-          // backgroundRepeat: 'no-repeat',
-          // backgroundSize: 'cover',
-          // overflowY: 'hidden'
+
         }}
 
         >
           <Box
             sx={{
-              // backgroundColor: 'background.default',
               minHeight: '100%',
               py: 3,
               overflow: 'scroll'
@@ -163,20 +144,6 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
               <CustomerListToolbar />
 
               <Box sx={{ pt: 3 }}>
-                {/* <DataGrid rows={courses2} columns={columns} pageSize={10} checkboxSelection onRowSelected	={(param) => {
-                        console.log("aabbcc");
-                        if (param.isSelected){
-                          selected.push(param.data.id);
-                        }
-                        else{
-                          for (let i = 0; i < selected.length; i++) {
-                            if(selected[i]===param.data.id){
-                              selected.splice(i, 1);
-                            }
-                          }
-                        }
-                        console.log(selected);
-                    }} /> */}
                 <Backdrop className={classes.backdrop} open={true}>
                   <CircularProgress color="inherit" />
                 </Backdrop>
@@ -205,17 +172,14 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
-          // overflowY: 'hidden'
         }}
 
         >
           <Box
             sx={{
 
-              // backgroundColor: 'background.default',
               minHeight: '100%',
               py: 3,
-              // overflow: 'scroll'
             }}
           >
             <Container maxWidth={false} >
@@ -277,7 +241,7 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
                 <Card >
                   <PerfectScrollbar>
                     <div style={{ height: 400, width: '100%' }}>
-                      <DataGrid rows={(courses) ? courses:[]} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
+                      <DataGrid rows={(coursesData) ? coursesData.courses:[]} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
                         console.log("aabbcc");
                         if (param.isSelected) {
                           selected.push(param.data.id);
@@ -313,7 +277,7 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     courseLoaded: state.auth.courseLoaded,
-    // coursesData: state.auth.coursesData,
+    coursesData: state.auth.coursesData,
 
 
   };

@@ -7,47 +7,95 @@ import {
   Typography
 } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import {rej } from "../../actions/action.auth";
+import { rej } from "../../actions/action.auth";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
+import { connect } from "react-redux";
 
-const TotalCustomers = (props) => (
-  <Card {...props}>
-    <CardContent>
-      <Grid
-        container
-        spacing={3}
-        sx={{ justifyContent: 'space-between' }}
-      >
-        <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="h6"
+const TotalCustomers = (props) => {
+  if (props.coursesData) {
+    return (
+      <Card >
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            sx={{ justifyContent: 'space-between' }}
           >
-            REJECTED COURSES
+            <Grid item>
+              <Typography
+                color="textSecondary"
+                gutterBottom
+                variant="h6"
+              >
+                REJECTED COURSES
           </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h3"
+              <Typography
+                color="textPrimary"
+                variant="h3"
+              >
+                {props.coursesData.rej}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{
+                  backgroundColor: red[900],
+                  height: 56,
+                  width: 56
+                }}
+              >
+                <ThumbDownOutlinedIcon />
+              </Avatar>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    )
+  }else{
+    return (
+      <Card >
+        <CardContent>
+          <Grid
+            container
+            spacing={3}
+            sx={{ justifyContent: 'space-between' }}
           >
-            {rej}
+            <Grid item>
+              <Typography
+                color="textSecondary"
+                gutterBottom
+                variant="h6"
+              >
+                REJECTED COURSES
           </Typography>
-        </Grid>
-        <Grid item>
-          <Avatar
-            sx={{
-              backgroundColor: red[900],
-              height: 56,
-              width: 56
-            }}
-          >
-            <ThumbDownOutlinedIcon />
-          </Avatar>
-        </Grid>
-      </Grid>
-    </CardContent>
-  </Card>
-);
+          <CircularProgress color="inherit" />
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{
+                  backgroundColor: red[900],
+                  height: 56,
+                  width: 56
+                }}
+              >
+                <ThumbDownOutlinedIcon />
+              </Avatar>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    )
 
-export default TotalCustomers;
+  }
+};
+
+const mapStateToProps = (state) => {
+  return {
+    courseLoaded: state.auth.courseLoaded,
+    coursesData: state.auth.coursesData,
+  };
+};
+export default connect(mapStateToProps)(TotalCustomers);

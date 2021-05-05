@@ -14,9 +14,7 @@ import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import { Box, Container,  Card,CardContent,
   InputAdornment,
   SvgIcon} from '@material-ui/core';
-// import CustomerListResults from './components/customer/CustomerListResults';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-// import customers from './__mocks__/customers';
 import { addCourse, courses, refreshRows,checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
@@ -66,9 +64,34 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3)
-  } 
+  },
+  cardHeader: {
+    padding: theme.spacing(1, 2),
+  },
+  list: {
+    width: 200,
+    height: 230,
+    backgroundColor: theme.palette.background.paper,
+    overflow: 'auto',
+  },
+  button: {
+    margin: theme.spacing(0.5, 0),
+  },
 }));
-function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,courseLoaded,coursesData }) {
+
+function not(a, b) {
+  return a.filter((value) => b.indexOf(value) === -1);
+}
+
+function intersection(a, b) {
+  return a.filter((value) => b.indexOf(value) !== -1);
+}
+
+function union(a, b) {
+  return [...a, ...not(b, a)];
+}
+
+function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,courseLoaded }) {
   refreshRows();
   const facultyid=localStorage.getItem("idno");
   const navigate = useNavigate();
@@ -78,6 +101,12 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
     offeringFaculty: facultyid ,
     isApproved: "Pending"
   });
+  const [checked, setChecked] = React.useState([]);
+  const [left, setLeft] = React.useState([0, 1, 2, 3]);
+  const [right, setRight] = React.useState([4, 5, 6, 7]);
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
   const { courseCode, courseName,offeringFaculty,isApproved } = addData;
   const onChange = (e) =>
   SetAddData({ ...addData, [e.target.name]: e.target.value });
@@ -85,8 +114,79 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
   const theme = useTheme();
   const [diaopen, diasetOpen] = React.useState(false);
   const [delt, setDelt] = React.useState(true);
-  const [courseList, setCourses] = React.useState([]);
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
 
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+  const numberOfChecked = (items) => intersection(checked, items).length;
+
+  const handleToggleAll = (items) => () => {
+    if (numberOfChecked(items) === items.length) {
+      setChecked(not(checked, items));
+    } else {
+      setChecked(union(checked, items));
+    }
+  };
+
+  const handleCheckedRight = () => {
+    setRight(right.concat(leftChecked));
+    setLeft(not(left, leftChecked));
+    setChecked(not(checked, leftChecked));
+  };
+
+  const handleCheckedLeft = () => {
+    setLeft(left.concat(rightChecked));
+    setRight(not(right, rightChecked));
+    setChecked(not(checked, rightChecked));
+  };
+  const customList = (title, items) => (
+    <Card>
+      <CardHeader
+        className={classes.cardHeader}
+        avatar={
+          <Checkbox
+            onClick={handleToggleAll(items)}
+            checked={numberOfChecked(items) === items.length && items.length !== 0}
+            indeterminate={numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0}
+            disabled={items.length === 0}
+            inputProps={{ 'aria-label': 'all items selected' }}
+          />
+        }
+        title={title}
+        subheader={`${numberOfChecked(items)}/${items.length} selected`}
+      />
+      <Divider />
+      <List className={classes.list} dense component="div" role="list">
+        {items.map((value) => {
+          const labelId = `transfer-list-all-item-${value}-label`;
+
+          return (
+            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
+              <ListItemIcon>
+                <Checkbox
+                  checked={checked.indexOf(value) !== -1}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+            </ListItem>
+          );
+        })}
+        <ListItem />
+      </List>
+    </Card>
+  );
   const deleteCourse=()=>{
     if (selected.length>0){
     console.log(facultyid);
@@ -118,6 +218,7 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
   }
   if (!courseLoaded) {
     
+    refreshRows();
 
     return (
       <>
@@ -128,7 +229,6 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
         <div style={{
           backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
           backgroundPosition: 'center',
-        
         }}
 
         >
@@ -155,9 +255,8 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
       </>
     );
   };
-
   if (courseLoaded ) {
-    refreshRows();
+        refreshRows();
 
     console.log(courses);
   return (
@@ -285,7 +384,7 @@ function CoursesF({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
             <Card >
       <PerfectScrollbar>
       <div style={{ height: 400, width: '100%' }}>
-              <DataGrid rows={(coursesData) ? coursesData.courses:[]} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
+              <DataGrid rows={(courses) ? courses:[] } columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
                 console.log("aabbcc");
                 if (param.isSelected) {
                   selected.push(param.data.courseCode);
@@ -320,9 +419,8 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     courseLoaded: state.auth.courseLoaded,
-    coursesData: state.auth.coursesData,
 
 
   };
 };
-export default connect(mapStateToProps, { addCourse,refreshRows,checkAuthenticated })(CoursesF);
+export default connect(mapStateToProps, { addCourse,refreshRows,checkAuthenticated })(CoursesS);

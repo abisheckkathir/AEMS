@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation,useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import {
@@ -20,14 +20,13 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  BookOpen as BookOpen,
+  BookOpen as BookOpen, 
   Users as UsersIcon
 } from 'react-feather';
 
 import NavItem from './NavItem';
 const type=localStorage.getItem("type");
 const user = JSON.parse(localStorage.getItem("user"));
-
 const guestitems = [
   {
     href: '/login',
@@ -122,6 +121,11 @@ switch(type) {
    items = guestitems;
 }
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+  const navigate = useNavigate();
+  if (user==null){
+    window.location.reload(false);
+  }
+  
   console.log(user)
   const location = useLocation();
 

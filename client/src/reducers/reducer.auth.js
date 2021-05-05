@@ -71,6 +71,7 @@ export default function (state = initialState, action) {
 
       localStorage.removeItem("access");
       localStorage.removeItem("usertype");
+      // localStorage.removeItem("user");
       localStorage.removeItem("idno");
       return {
         ...state,

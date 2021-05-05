@@ -5,8 +5,9 @@ import {
   Grid
 } from '@material-ui/core';
 import { connect } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
-import { addCourse, courses, refreshRows } from "../actions/action.auth";
+import {refreshRows } from "../actions/action.auth";
 import Budget from '../components/dashboard//Budget';
 import LatestOrders from '../components/dashboard//LatestOrders';
 import LatestProducts from '../components/dashboard//LatestProducts';
@@ -17,8 +18,14 @@ import TotalProfit from '../components/dashboard//TotalProfit';
 import TrafficByDevice from '../components/dashboard//TrafficByDevice';
 
 function Dashboard({refreshRows,isAuthenticated,courseLoaded }){
-  console.log("abc");
-  refreshRows();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  if (user==null ){
+    window.location.reload(false);
+
+  }else{
+    refreshRows();
+  }
   return(
   <>
     <Helmet>Kit
@@ -117,7 +124,7 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     courseLoaded: state.auth.courseLoaded,
-    // coursesData: state.auth.coursesData,
+    coursesData: state.auth.coursesData,
 
 
   };
