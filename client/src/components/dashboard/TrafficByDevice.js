@@ -66,19 +66,19 @@ const TrafficByDevice = (props) => {
     const devices = [
       {
         title: 'Approved',
-        value: appr/tot*100,
+        value: Math.round(appr/tot*100),
         icon: ThumbUpOutlinedIcon,
         color: colors.green[600]
       },
       {
         title: 'Rejected',
-        value: rej/tot*100,
+        value: Math.round(rej/tot*100),
         icon: ThumbDownOutlinedIcon,
         color: colors.red[900]
       },
       {
         title: 'Pending',
-        value: pend/tot*100,
+        value: Math.round(pend/tot*100),
         icon: TimerOutlinedIcon,
         color: colors.orange[600]
       }

@@ -129,5 +129,4 @@ const mapStateToProps = (state) => {
 
   };
 };
-// export default Dashboard;
 export default connect(mapStateToProps, { refreshRows })(Dashboard);

@@ -1,13 +1,12 @@
 import { Helmet } from 'react-helmet';
-import React, { Suspense, Spinner } from "react";
-import Grid from "@material-ui/core/Grid";
+import React, {  } from "react";
 import axios from "axios";
 import clsx from 'clsx';
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Search as SearchIcon } from 'react-feather';
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
@@ -16,19 +15,13 @@ import {
   InputAdornment,
   SvgIcon
 } from '@material-ui/core';
-// import CustomerListResults from './components/customer/CustomerListResults';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-// import customers from './__mocks__/customers';
 import { addCourse, courses, refreshRows, reset,checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogTitle from "@material-ui/core/DialogTitle";
 var selected = [];
 const courses2 = JSON.parse('{"courses":[]}');
 const columns = [
@@ -80,8 +73,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenticated,courseLoaded,coursesData }) {
   refreshRows();
+  var csdet;
+  var flag = false;
   const facultyid = localStorage.getItem("idno");
   const navigate = useNavigate();
+  var flag2=false;
+
+  const [rows, setRows] = React.useState([]);
+  const [srows, setsRows] = React.useState(false);
+  const onSearch = (e) => {
+      
+    var stext=e.target.value.toString().toLowerCase();
+    
+    var a=rows.filter((value) => {
+      console.log(value.courseName)
+      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.offeringFaculty.toString().toLowerCase().search(stext) !== -1))
+    });
+
+    console.log(a)
+    setsRows(a);
+    flag2=true
+  
+  
+}
   const classes = useStyles();
   const theme = useTheme();
   // const [diaopen, diasetOpen] = React.useState(false);
@@ -159,8 +173,16 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
 
   if (courseLoaded ) {
     refreshRows();
+    if (coursesData) {
+      csdet = coursesData.courses;
+      if (!flag && rows.length == 0) {
+        setRows(csdet);
+        console.log("set")
+        flag = true;
+      }
+    }
+    console.log(coursesData)
 
-    console.log(courses);
     return (
       <>
         <Helmet>
@@ -216,6 +238,11 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
                       <Box sx={{ maxWidth: 500 }}>
                         <TextField
                           fullWidth
+                          id="searchBox"
+                          name="searchBox"
+                          label="Search"
+                          autoFocus
+                          onChange={(e) => onSearch(e)}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -241,26 +268,16 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
                 <Card >
                   <PerfectScrollbar>
                     <div style={{ height: 400, width: '100%' }}>
-                      <DataGrid rows={(coursesData) ? coursesData.courses:[]} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
-                        console.log("aabbcc");
-                        if (param.isSelected) {
-                          selected.push(param.data.id);
-                        }
-                        else {
-                          for (let i = 0; i < selected.length; i++) {
-                            if (selected[i] === (param.data.id)) {
-                              selected.splice(i, 1);
-                            }
-                          }
-                        }
-                        if (selected.length == 0) {
+                      <DataGrid rows={(srows)? srows:rows} columns={columns} pageSize={10} className={classes.root} checkboxSelection onSelectionModelChange={(param) => {console.log(param)
+                      selected=param.selectionModel;
+                    // console.log(selected)
+                    if (selected.length == 0) {
                           setDelt(true);
                         }
                         else {
                           setDelt(false);
-                        }
-                        console.log(selected);
-                      }} />
+                        }}} 
+                      />
                     </div>
                   </PerfectScrollbar>
                 </Card>

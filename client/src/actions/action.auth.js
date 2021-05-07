@@ -15,12 +15,12 @@ import {
 /* eslint-disable */
 import setAuthToken from '../utils/setAuthToken';
 
-// export const abc=123;
 export var courses;
 export var appr=0;
 export var rej=0;
 export var pend=0;
 var dict;
+var csdet=[];
 export const refreshRows = () => async (dispatch) => {
   var user=localStorage.getItem("idno");
   var fid=user
@@ -35,22 +35,19 @@ export const refreshRows = () => async (dispatch) => {
   const res = axios.get('http://localhost:8080/api/auth/course-list',{ params: { offeringFaculty:fid } })
     .then(res => {
       console.log(fid);
-      // console.log(res);
+      let jsonObj = JSON.stringify(res.data);
+      
       appr=0;
       rej=0;
       pend=0;
-      let jsonObj = JSON.stringify(res.data);
-      
+      csdet=[]
+      courses=[];
       if (jsonObj.length > 2) {
         jsonObj = '{"courses":' + jsonObj + '}'
-        // console.log(jsonObj)
         var js = JSON.parse(jsonObj);
         for (let i in js.courses) {
-          // if (js.courses[i].offeringFaculty!=fid){
-          //   js.courses.splice
-          //   continue;
-          // }
           if (js.courses[i].isApproved=="Yes"){
+            csdet.push(js.courses[i].courseCode+" "+js.courses[i].courseName);
             appr+=1;
           }else if (js.courses[i].isApproved=="No") {
             rej+=1;
@@ -58,27 +55,24 @@ export const refreshRows = () => async (dispatch) => {
             pend+=1;
           }
           delete js.courses[i].__v;
-          // delete js.courses[i].offeringFaculty;
           js.courses[i].id = js.courses[i]._id
           delete js.courses[i]._id;
 
 
         }
         var jso = JSON.stringify(js);
-        // jso=jso.replace('course','');
         jso = jso.slice(11, -1)
-        // console.log(jso)
-        // delete jsonObj['_id'];
-        // console.log(jsonObj.courseName);
-        // // delete jsonObj.oferringFaculty;
-        // // delete jsonObj.__v;
         courses = JSON.parse(jso);
-        if (!(courses)){
-            courses=[];
-        }
-        // console.log(persons)
+
+        console.log(courses)
+ 
       }
-      dict = {"courses":courses,"appr":appr,"rej":rej,"pend":pend};
+      if(localStorage.getItem("type")=="student"){
+        dict = {"courses":csdet,"appr":appr,"rej":rej,"pend":pend};
+      }else{
+        dict = {"courses":courses,"appr":appr,"rej":rej,"pend":pend};
+      }
+      
     });
     dispatch({
       type: COURSE_LIST,

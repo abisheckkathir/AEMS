@@ -412,6 +412,26 @@ router.post('/approve-course/:ids', (req, res) => {
   });
 
 });
+router.post('/assign-course/:ids/:fid', (req, res) => {
+  console.log('assign')
+  var idarr = req.params.ids.split(",")
+  var fid= req.params.fid.split(",")
+  var flen=idarr.length
+  assignSchema.deleteMany({ 'studentID': { '$in': fid }}, (error, data) => {
+  for(let i=0;i<flen;i++){
+    const newCourse = new assignSchema({
+
+      courseCode: idarr[i],
+      studentID: fid[0],
+      isApproved: "Pending",
+      _id:fid[0]+idarr[i],
+    })
+    newCourse.save();}
+  });
+  
+  
+  
+});
 router.post('/reject-course/:ids', (req, res) => {
   console.log('reject')
   var idarr = req.params.ids.split(",");
