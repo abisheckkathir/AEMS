@@ -10,5 +10,6 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 export const COURSE_ADDED = 'COURSE_ADDED';
 export const COURSEADD_FAILED = 'COURSEADD_FAILED';
 export const COURSE_LIST = 'COURSE_LIST';
+export const ASSIGN_LIST = 'ASSIGN_LIST';
 export const COURSE_FAIL = 'COURSE_FAIL';
 /* eslint-disable */

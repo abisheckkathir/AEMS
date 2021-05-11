@@ -454,6 +454,51 @@ router.post('/reject-course/:ids', (req, res) => {
   });
 
 });
+router.post('/approve-assign/:ids', (req, res) => {
+  console.log('approve')
+  var idarr = req.params.ids.split(",");
+  assignSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"Yes"}}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else if (data.deletedCount != 0) {
+      console.log(data);
+      res.status(200).json({
+        msg: data,
+      });
+    }
+    else {
+
+      res.status(500).json({
+        message: "Course not found",
+      });
+
+    }
+  });
+
+});
+router.post('/reject-assign/:ids', (req, res) => {
+  console.log('reject')
+  var idarr = req.params.ids.split(",");
+  assignSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"No"}}, (error, data) => {
+    if (error) {
+      return next(error);
+    } else if (data.deletedCount != 0) {
+      console.log(data);
+      res.status(200).json({
+        msg: data,
+      });
+    }
+    else {
+
+      res.status(500).json({
+        message: "Course not found",
+      });
+
+    }
+  });
+
+});
+
 
 router.route("/delete-faculty/:id").delete((req, res, next) => {
   facultySchema.deleteOne({ 'idno': req.params.id, }, (error, data) => {

@@ -10,6 +10,7 @@ import {
   LOGOUT_USER,
   COURSE_LIST,
   COURSE_FAIL,
+  ASSIGN_LIST,
 } from "../actions/action.types";
 
 const initialState = {
@@ -18,6 +19,8 @@ const initialState = {
   courseLoaded:false,
   loading: true,
   coursesData: null,
+  assignData: null,
+  assignLoaded:false,
   user: null,
 };
 
@@ -36,6 +39,12 @@ export default function (state = initialState, action) {
         ...state,
         courseLoaded:false,
         coursesData: payload,
+      };
+    case ASSIGN_LIST:
+      return {
+        ...state,
+        assignLoaded:true,
+        assignData: payload,
       };
     case AUTHENTICATION_SUCESS:
       return {

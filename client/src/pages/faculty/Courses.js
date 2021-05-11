@@ -324,18 +324,9 @@ function CoursesF({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
                 <Card >
                   <PerfectScrollbar>
                     <div style={{ height: 400, width: '100%' }}>
-                      <DataGrid rows={(srows)? srows:rows} columns={columns} pageSize={10} className={classes.root} checkboxSelection onRowSelected={(param) => {
+                      <DataGrid rows={(srows)? srows:rows} columns={columns} pageSize={10} className={classes.root} checkboxSelection onSelectionModelChange={(param) => {
                         console.log("aabbcc");
-                        if (param.isSelected) {
-                          selected.push(param.data.courseCode);
-                        }
-                        else {
-                          for (let i = 0; i < selected.length; i++) {
-                            if (selected[i] === param.data.courseCode) {
-                              selected.splice(i, 1);
-                            }
-                          }
-                        }
+                        selected=param.selectionModel;
                         if (selected.length == 0) {
                           setDelt(true);
                         }

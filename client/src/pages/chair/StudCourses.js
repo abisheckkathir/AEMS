@@ -16,7 +16,7 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-import { addCourse, courses, refreshRows, reset,checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, courses, refreshAssign, reset,checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -28,7 +28,7 @@ const columns = [
   { field: 'id', headerName: 'id', width: 200,hide: true },
   { field: 'courseCode', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
-  { field: 'offeringFaculty', headerName: 'Offering Faculty', width: 200 },
+  { field: 'studentID', headerName: 'Student ID', width: 200 },
   {
     field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
       clsx("super-app", {
@@ -71,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   }
 }));
-function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenticated,courseLoaded,coursesData }) {
-  refreshRows();
+function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAuthenticated,assignLoaded,assignData }) {
+  refreshAssign();
   var csdet;
   var flag = false;
   const facultyid = localStorage.getItem("idno");
@@ -87,7 +87,7 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     
     var a=rows.filter((value) => {
       console.log(value.courseName)
-      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.offeringFaculty.toString().toLowerCase().search(stext) !== -1))
+      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.studentID.toString().toLowerCase().search(stext) !== -1))
     });
 
     console.log(a)
@@ -105,9 +105,9 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .post(`http://localhost:8080/api/auth/reject-course/${selected}`)
+        .post(`http://localhost:8080/api/auth/reject-assign/${selected}`)
         .then(a => {
-          refreshRows();
+          refreshAssign();
         })
         .catch(err => alert(err));
       window.location.reload(false);
@@ -117,9 +117,9 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .post(`http://localhost:8080/api/auth/approve-course/${selected}`)
+        .post(`http://localhost:8080/api/auth/approve-assign/${selected}`)
         .then(a => {
-          refreshRows();
+          refreshAssign();
         })
         .catch(err => alert(err));
       window.location.reload(false);
@@ -131,7 +131,7 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     navigate('/login', { replace: false });
 
   }
-  if (!courseLoaded) {
+  if (!assignLoaded) {
 
 
     return (
@@ -171,10 +171,10 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     );
   };
 
-  if (courseLoaded ) {
-    refreshRows();
-    if (coursesData) {
-      csdet = coursesData.courses;
+  if (assignLoaded ) {
+    refreshAssign();
+    if (assignData) {
+      csdet = assignData.courses;
       if (!flag && rows.length == 0) {
         setRows(csdet);
         console.log("set")
@@ -292,10 +292,10 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    courseLoaded: state.auth.courseLoaded,
-    coursesData: state.auth.coursesData,
+    assignLoaded: state.auth.assignLoaded,
+    assignData: state.auth.assignData,
 
 
   };
 };
-export default connect(mapStateToProps, { addCourse, refreshRows,reset, checkAuthenticated })(CoursesC);
+export default connect(mapStateToProps, { addCourse, refreshAssign,reset, checkAuthenticated })(StudCourses);

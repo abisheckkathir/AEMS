@@ -10,16 +10,19 @@ import {
   COURSE_ADDED,
   COURSE_LIST,
   COURSE_FAIL,
+  ASSIGN_LIST,
   COURSEADD_FAILED,
 } from './action.types';
 /* eslint-disable */
 import setAuthToken from '../utils/setAuthToken';
 
 export var courses;
+export var coursesS;
 export var appr=0;
 export var rej=0;
 export var pend=0;
 var dict;
+var dictS;
 var csdet=[];
 export const refreshRows = () => async (dispatch) => {
   var user=localStorage.getItem("idno");
@@ -77,6 +80,51 @@ export const refreshRows = () => async (dispatch) => {
     dispatch({
       type: COURSE_LIST,
       payload: dict,
+    });}catch (e) {
+      console.log(e);
+    }
+
+};
+export const refreshAssign = () => async (dispatch) => {
+  var user=localStorage.getItem("idno");
+  var fid=user
+  if(!fid){
+    window.location.reload(false);
+  }
+  if (localStorage.getItem("type")!="faculty"){
+    fid="";
+  }
+  console.log(fid)
+  try {
+  const res = axios.get('http://localhost:8080/api/auth/assign-list',{ params: { studentID:fid } })
+    .then(res => {
+      console.log(fid);
+      let jsonObj = JSON.stringify(res.data);
+      coursesS=[];
+      if (jsonObj.length > 2) {
+        jsonObj = '{"courses":' + jsonObj + '}'
+        var js = JSON.parse(jsonObj);
+        for (let i in js.courses) {
+          js.courses[i].courseName = js.courses[i].courseCode.split(" ").slice(1).join(" ");
+          js.courses[i].courseCode = js.courses[i].courseCode.split(" ")[0]
+          delete js.courses[i].__v;
+          js.courses[i].id = js.courses[i]._id
+          delete js.courses[i]._id;
+
+
+        }
+        var jso = JSON.stringify(js);
+        jso = jso.slice(11, -1)
+        coursesS = JSON.parse(jso);
+        dictS = {"courses":coursesS};
+        console.log(coursesS)
+ 
+      }
+      
+    });
+    dispatch({
+      type: ASSIGN_LIST,
+      payload: dictS,
     });}catch (e) {
       console.log(e);
     }

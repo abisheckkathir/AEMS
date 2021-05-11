@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation,useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import {
   Avatar,
@@ -70,7 +71,12 @@ const chairitems = [
   {
     href: '/app/chair/courses',
     icon: BookOpen,
-    title: 'Courses'
+    title: 'Approve Faculty'
+  },
+  {
+    href: '/app/chair/studcourses',
+    icon: DoneAllIcon,
+    title: 'Approve Student'
   },
   {
     href: '/app/account',
