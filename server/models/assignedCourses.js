@@ -2,7 +2,6 @@ const mongoose=require('mongoose');
 const Schema = mongoose.Schema;
 const uniqueValidator=require('mongoose-unique-validator');
 const Validator = require('validator');
-const isEmpty = require('./is-empty');
 
 let assignSchema =new Schema({
     _id:{
