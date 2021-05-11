@@ -32,9 +32,9 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
       {...rest}
     >
       <Toolbar>
-        <RouterLink to="/">
+        {/* <RouterLink to="/">
           <Logo />
-        </RouterLink>
+        </RouterLink> */}
         <Box sx={{ flexGrow: 1 }} />
         <Hidden lgDown>
           <IconButton color="inherit">

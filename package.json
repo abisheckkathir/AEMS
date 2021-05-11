@@ -1,0 +1,26 @@
+{
+  "name": "AEMS",
+  "version": "1.0.0",
+  "description": "# To run the client: #### - Navigate to client2 #### - Run yarn install #### - Run yarn start",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "cd server/ && yarn install && yarn start",
+    "client": "cd client/ && yarn install && yarn start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abisheckkathir/AEMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abisheckkathir/AEMS/issues"
+  },
+  "homepage": "https://github.com/abisheckkathir/AEMS#readme"
+}
