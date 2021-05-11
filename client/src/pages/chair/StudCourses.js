@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet';
 import React, {  } from "react";
 import axios from "axios";
 import clsx from 'clsx';
-
+import config from "../../utils/config";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -105,7 +105,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .post(`http://localhost:8080/api/auth/reject-assign/${selected}`)
+        .post(`${config.backend}/api/auth/reject-assign/${selected}`)
         .then(a => {
           refreshAssign();
         })
@@ -117,7 +117,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .post(`http://localhost:8080/api/auth/approve-assign/${selected}`)
+        .post(`${config.backend}/api/auth/approve-assign/${selected}`)
         .then(a => {
           refreshAssign();
         })

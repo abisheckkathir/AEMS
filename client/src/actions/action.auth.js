@@ -15,7 +15,7 @@ import {
 } from './action.types';
 /* eslint-disable */
 import setAuthToken from '../utils/setAuthToken';
-
+import config from "../utils/config";
 export var courses;
 export var coursesS;
 export var appr=0;
@@ -35,7 +35,7 @@ export const refreshRows = () => async (dispatch) => {
   }
   console.log(fid)
   try {
-  const res = axios.get('http://localhost:8080/api/auth/course-list',{ params: { offeringFaculty:fid } })
+  const res = axios.get(`${config.backend}/api/auth/course-list`,{ params: { offeringFaculty:fid } })
     .then(res => {
       console.log(fid);
       let jsonObj = JSON.stringify(res.data);
@@ -96,7 +96,7 @@ export const refreshAssign = () => async (dispatch) => {
   }
   console.log(fid)
   try {
-  const res = axios.get('http://localhost:8080/api/auth/assign-list',{ params: { studentID:fid } })
+  const res = axios.get(`${config.backend}/api/auth/assign-list`,{ params: { studentID:fid } })
     .then(res => {
       console.log(fid);
       let jsonObj = JSON.stringify(res.data);
@@ -139,7 +139,7 @@ export const checkAuthenticated = () => async (dispatch) => {
   }
 
   try {
-    const res = await axios.get("http://localhost:8080/api/auth/");
+    const res = await axios.get(`${config.backend}/api/auth/`);
     
     dispatch({
       type: AUTHENTICATION_SUCESS,
@@ -165,7 +165,7 @@ export const login = (idno,type, password) => async (dispatch) => {
   const body = JSON.stringify({ idno, password });
   console.log(body);
   try {
-    const res = await axios.post("http://localhost:8080/api/auth//signin-" + type, body, config);
+    const res = await axios.post(`${config.backend}/api/auth/signin-` + type, body, config);
     console.log(res.data);
     dispatch({
       type: LOGIN_SUCESS,
@@ -197,7 +197,7 @@ export const signup = (idno, name,dept, type,password) => async (dispatch) => {
   try {
     console.log(body);
     console.log(config)
-    const res = await axios.post("http://localhost:8080/api/auth/register-" + type, body, config);
+    const res = await axios.post(`${config.backend}/api/auth/register-` + type, body, config);
     dispatch({
       type: SIGNUP_SUCESS,
       payload: res.data,
@@ -227,7 +227,7 @@ export const addCourse = (courseCode, courseName, offeringFaculty,isApproved) =>
     console.log(body);
     console.log(config)
 
-    const res = await axios.post("http://localhost:8080/api/auth/add-course", body, config);
+    const res = await axios.post(`${config.backend}/api/auth/add-course`, body, config);
     refreshRows();
     dispatch({
       type: COURSE_ADDED,

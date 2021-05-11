@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
 import axios from "axios";
-
+import config from "../../utils/config";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -133,7 +133,7 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
     if (right.length > 0) {
       console.log(studentid);
       axios
-        .post(`http://localhost:8080/api/auth/assign-course/${right}/${studentid}`)
+        .post(`${config.backend}/api/auth/assign-course/${right}/${studentid}`)
         .then(a => {
           refreshRows();
         })
