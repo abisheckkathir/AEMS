@@ -3,7 +3,7 @@ import React, { Suspense, Spinner } from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import clsx from 'clsx';
-import config from "../../utils/config";
+import configk from "../../utils/configk";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -118,7 +118,7 @@ function CoursesF({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .delete(`${config.backend}/api/auth/delete-course/${selected}/${facultyid}`)
+        .delete(`${configk.backend}/api/auth/delete-course/${selected}/${facultyid}`)
         .then(a => {
           refreshRows();
         })
