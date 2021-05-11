@@ -5,3 +5,4 @@ package-lock.json
 yarn.lock
 client2/yarn.lock
 client/src/utils/config.js
+.replit
