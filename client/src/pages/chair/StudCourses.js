@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import React, {  } from "react";
+import React, { } from "react";
 import axios from "axios";
 import clsx from 'clsx';
 import configk from "../../utils/configk";
@@ -9,14 +9,18 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useNavigate } from 'react-router-dom';
 import { Search as SearchIcon } from 'react-feather';
 import DeleteIcon from "@material-ui/icons/Delete";
+import { green,red } from '@material-ui/core/colors';
+
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Box, Container, Card, CardContent,
   InputAdornment,
   SvgIcon
 } from '@material-ui/core';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-import { addCourse, courses, refreshAssign, reset,checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, courses, refreshAssign, reset, checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -25,16 +29,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 var selected = [];
 const courses2 = JSON.parse('{"courses":[]}');
 const columns = [
-  { field: 'id', headerName: 'id', width: 200,hide: true },
+  { field: 'id', headerName: 'id', width: 200, hide: true },
   { field: 'courseCode', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
   { field: 'studentID', headerName: 'Student ID', width: 200 },
   {
     field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
       clsx("super-app", {
-        negative: params.value=="Yes",
-        positive: params.value=="No",
-        neutral: params.value=="Pending"
+        negative: params.value == "Yes",
+        positive: params.value == "No",
+        neutral: params.value == "Pending"
       })
   },
 ];
@@ -71,31 +75,40 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   }
 }));
-function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAuthenticated,assignLoaded,assignData }) {
+function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAuthenticated, assignLoaded, assignData }) {
   refreshAssign();
   var csdet;
   var flag = false;
+  const [copen, setCopen] = React.useState(false);
+  if (localStorage.open) {
+    if(JSON.parse(localStorage.open)!=copen){
+      setCopen(JSON.parse(localStorage.open));
+    }
+    
+  }else{
+    localStorage.setItem("open",false)
+  }
   const facultyid = localStorage.getItem("idno");
   const navigate = useNavigate();
-  var flag2=false;
+  var flag2 = false;
 
   const [rows, setRows] = React.useState([]);
   const [srows, setsRows] = React.useState(false);
   const onSearch = (e) => {
-      
-    var stext=e.target.value.toString().toLowerCase();
-    
-    var a=rows.filter((value) => {
+
+    var stext = e.target.value.toString().toLowerCase();
+
+    var a = rows.filter((value) => {
       console.log(value.courseName)
       return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.studentID.toString().toLowerCase().search(stext) !== -1))
     });
 
     console.log(a)
     setsRows(a);
-    flag2=true
-  
-  
-}
+    flag2 = true
+
+
+  }
   const classes = useStyles();
   const theme = useTheme();
   // const [diaopen, diasetOpen] = React.useState(false);
@@ -124,6 +137,15 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
         .catch(err => alert(err));
       window.location.reload(false);
     }
+  };
+
+  const openCourse = () => {
+    localStorage.setItem("open",true);
+    setCopen(true);
+  };
+  const closeCourse = () => {
+    localStorage.setItem("open",false);
+    setCopen(false);
   };
 
   if (!facultyid) {
@@ -171,7 +193,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
     );
   };
 
-  if (assignLoaded ) {
+  if (assignLoaded) {
     refreshAssign();
     if (assignData) {
       csdet = assignData.courses;
@@ -211,6 +233,26 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
                     justifyContent: 'flex-end'
                   }}
                 >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={copen}
+                    style={{ marginRight: 10 }}
+                    onClick={openCourse}
+                    startIcon={<LockOpenOutlinedIcon />}
+                  >
+                    Open Registration
+      </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={!copen}
+                    style={{ marginRight: 10 }}
+                    onClick={closeCourse}
+                    startIcon={<LockOutlinedIcon />}
+                  >
+                    Close Registration
+      </Button>
                   <Button
                     variant="contained"
                     color="primary"
@@ -267,15 +309,17 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated,reset, isAut
                 <Card >
                   <PerfectScrollbar>
                     <div style={{ height: 400, width: '100%' }}>
-                      <DataGrid rows={(srows)? srows:rows} columns={columns} pageSize={10} className={classes.root} checkboxSelection onSelectionModelChange={(param) => {console.log(param)
-                      selected=param.selectionModel;
-                    // console.log(selected)
-                    if (selected.length == 0) {
+                      <DataGrid rows={(srows) ? srows : rows} columns={columns} pageSize={10} className={classes.root} checkboxSelection onSelectionModelChange={(param) => {
+                        console.log(param)
+                        selected = param.selectionModel;
+                        // console.log(selected)
+                        if (selected.length == 0) {
                           setDelt(true);
                         }
                         else {
                           setDelt(false);
-                        }}} 
+                        }
+                      }}
                       />
                     </div>
                   </PerfectScrollbar>
@@ -298,4 +342,4 @@ const mapStateToProps = (state) => {
 
   };
 };
-export default connect(mapStateToProps, { addCourse, refreshAssign,reset, checkAuthenticated })(StudCourses);
+export default connect(mapStateToProps, { addCourse, refreshAssign, reset, checkAuthenticated })(StudCourses);

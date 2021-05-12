@@ -1,10 +1,16 @@
 import { Helmet } from 'react-helmet';
-import React, {  } from "react";
+import React, { } from "react";
 import Grid from "@material-ui/core/Grid";
 import clsx from 'clsx';
 import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
 import axios from "axios";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 import configk from "../../utils/configk";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,27 +24,33 @@ import { Search as SearchIcon } from 'react-feather';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import { Box, Container,  Card,CardContent,
+import {
+  Box, Container, Card, CardContent,
   InputAdornment,
-  SvgIcon} from '@material-ui/core';
+  SvgIcon
+} from '@material-ui/core';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-import { addCourse, courses, refreshRows,checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, courses, refreshRows, checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 var selected = [];
-const courses2 = JSON.parse('{"courses":[]}');
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 const columns = [
-  { field: 'id', headerName: 'id', width: 200,hide: true },
+  { field: 'id', headerName: 'id', width: 200, hide: true },
   { field: 'courseCode', headerName: 'Course Code', width: 200 },
   { field: 'courseName', headerName: 'Course Name', width: 200 },
-  { field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
-  clsx("super-app", {
-    negative: params.value=="Yes",
-    positive: params.value=="No",
-    neutral: params.value=="Pending"
-  }) },
+  {
+    field: 'isApproved', headerName: 'Approval Status', width: 200, cellClassName: (params) =>
+      clsx("super-app", {
+        negative: params.value == "Yes",
+        positive: params.value == "No",
+        neutral: params.value == "Pending"
+      })
+  },
 ];
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,19 +90,31 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,courseLoaded,coursesData}) {
+function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated, courseLoaded, coursesData }) {
   refreshRows();
-  const studentid=localStorage.getItem("idno");
+  const studentid = localStorage.getItem("idno");
   var csdet;
+  const [copen, setCopen] = React.useState(false);
+  if (localStorage.open) {
+    console.log(copen)
+
+    if (JSON.parse(localStorage.open) != copen) {
+      setCopen(JSON.parse(localStorage.open));
+      console.log(copen)
+    }
+
+  } else {
+    localStorage.setItem("open", false)
+  }
   const navigate = useNavigate();
   const [checked, setChecked] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
-  var flag=false;
+  var flag = false;
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
   const onChange = (e) =>
-  SetAddData({ ...addData, [e.target.name]: e.target.value });
+    SetAddData({ ...addData, [e.target.name]: e.target.value });
   const classes = useStyles();
   const theme = useTheme();
   const [diaopen, diasetOpen] = React.useState(false);
@@ -117,7 +141,9 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
       setChecked(union(checked, items));
     }
   };
-
+  const handleClose = () => {
+    navigate('/app/dashboard', { replace: true });
+  };
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
@@ -180,60 +206,83 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
       </List>
     </Card>
   );
-  if(!studentid){
+  if (!studentid) {
     navigate('/login', { replace: true });
 
   }
-  if (courseLoaded ) {
-    if(coursesData){
-      csdet=coursesData.courses;
-      if(!flag && left.length==0){
+  if (courseLoaded) {
+    if (coursesData) {
+      csdet = coursesData.courses;
+      if (!flag && left.length == 0) {
         setLeft(csdet);
-        flag=true;
-        }
+        flag = true;
+      }
     }
-    
-    // console.log(cours);
-  return (
-    <>
-      <Helmet>
-        <title>Courses | AEMS</title>
-      </Helmet>
-      <div style={{
-        backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
-        height: '100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-      }}
 
-      >
-        <Box 
-          sx={{
-            
-            minHeight: '100%',
-            py: 3,
-          }}
+    // console.log(cours);
+    return (
+      <>
+        <Helmet>
+          <title>Courses | AEMS</title>
+        </Helmet>
+        <Dialog
+          open={!copen}
+          disableEscapeKeyDown={true}
+          disableBackdropClick={true}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
         >
-          <Container maxWidth={false} >
-          <Box>
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'flex-end'
-      }}
-    >
-      <Button
-        variant="contained"
-        color="primary"
-        style={{marginRight: 10}}
-        onClick={submitCourse}
-        disabled={right.length === 0}
-        startIcon={<AddCircleRoundedIcon />}
-      >
-        Submit Preference
+          <DialogTitle id="alert-dialog-slide-title">{"Course Registration not open!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Course Registration may not be opened by the chairperson or it is past deadline.
+          </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              OK
+          </Button>
+          </DialogActions>
+        </Dialog>
+
+        <div style={{
+          backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
+          height: '100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
+
+        >
+          <Box
+            sx={{
+
+              minHeight: '100%',
+              py: 3,
+            }}
+          >
+            <Container maxWidth={false} >
+              <Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginRight: 10 }}
+                    onClick={submitCourse}
+                    disabled={right.length === 0}
+                    startIcon={<AddCircleRoundedIcon />}
+                  >
+                    Submit Preference
       </Button>
-      {/* <Button
+                  {/* <Button
         variant="contained"
         color="secondary"
         disabled={delt}
@@ -242,8 +291,8 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
       >
         Delete Course
       </Button> */}
-    </Box>
-    {/* <Box sx={{ mt: 3 }}>
+                </Box>
+                {/* <Box sx={{ mt: 3 }}>
       <Card>
         <CardContent>
           <Box sx={{ maxWidth: 500 }}>
@@ -268,62 +317,63 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
         </CardContent>
       </Card>
     </Box> */}
-  </Box>
-            
-            <Box height={300} sx={{ pt: 3 }}>
-            <Card >
-            <Box m={2}>
-      <Grid container spacing={2} justify="space-evenly" alignItems="center" className={classes.root}>
-      <Grid item xs>{customList('Choices', left)}</Grid>
-      <Grid item xs>
-        <Grid container direction="column" alignItems="center">
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
-          >
-            &gt;
+              </Box>
+
+              <Box height={300} sx={{ pt: 3 }}>
+                <Card >
+                  <Box m={2}>
+                    <Grid container spacing={2} justify="space-evenly" alignItems="center" className={classes.root}>
+                      <Grid item xs>{customList('Choices', left)}</Grid>
+                      <Grid item xs>
+                        <Grid container direction="column" alignItems="center">
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            className={classes.button}
+                            onClick={handleCheckedRight}
+                            disabled={leftChecked.length === 0}
+                            aria-label="move selected right"
+                          >
+                            &gt;
           </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt;
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            className={classes.button}
+                            onClick={handleCheckedLeft}
+                            disabled={rightChecked.length === 0}
+                            aria-label="move selected left"
+                          >
+                            &lt;
           </Button>
-        </Grid>
-      </Grid>
-      <Grid item xs>{customList('Chosen', right)}</Grid>
-    </Grid>
-    </Box>
-            </Card>
-            </Box>
-            
-          </Container>
-        </Box>
-      </div>
-    </>
-  );}else {
-    
+                        </Grid>
+                      </Grid>
+                      <Grid item xs>{customList('Chosen', right)}</Grid>
+                    </Grid>
+                  </Box>
+                </Card>
+              </Box>
+
+            </Container>
+          </Box>
+        </div>
+      </>
+    );
+  } else {
+
     refreshRows();
-  
+
     return (
       <>
         <Helmet>
           <title>Courses | AEMS</title>
         </Helmet>
-  
+
         <div style={{
           backgroundImage: `url("https://images.edexlive.com/uploads/user/imagelibrary/2020/11/27/original/01DEC2013NIE03_04-02-2014_19_0_1.jpg")`,
           backgroundPosition: 'center',
         }}
-  
+
         >
           <Box
             sx={{
@@ -334,16 +384,16 @@ function CoursesS({ addCourse,refreshRows,checkAuthenticated, isAuthenticated,co
           >
             <Container maxWidth={false} >
               <CustomerListToolbar />
-              
+
               <Box sx={{ pt: 3 }}>
                 <Backdrop className={classes.backdrop} open={true}>
                   <CircularProgress color="inherit" />
                 </Backdrop>
               </Box>
-  
+
             </Container>
           </Box>
-  
+
         </div>
       </>
     );
@@ -358,4 +408,4 @@ const mapStateToProps = (state) => {
 
   };
 };
-export default connect(mapStateToProps, { addCourse,refreshRows,checkAuthenticated })(CoursesS);
+export default connect(mapStateToProps, { addCourse, refreshRows, checkAuthenticated })(CoursesS);
