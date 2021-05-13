@@ -11,7 +11,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import {
   Box,
   Button,
-  Checkbox,
   MenuItem,
   IconButton,
   FilledInput,
@@ -21,11 +20,8 @@ import {
   Select,
   FormHelperText,
   FormControl,
-  FormControlLabel,
   Link,
   TextField,
-  Radio,
-  RadioGroup,
   Typography
 } from '@material-ui/core';
 
