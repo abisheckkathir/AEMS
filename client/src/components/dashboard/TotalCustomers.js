@@ -1,16 +1,13 @@
 import {
   Avatar,
-  Box,
   Card,
   CardContent,
   Grid,
   Typography
 } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { rej } from "../../actions/action.auth";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import { connect } from "react-redux";
 

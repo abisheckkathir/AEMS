@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import React, { Suspense, Spinner } from "react";
+import React, {  } from "react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import clsx from 'clsx';
@@ -7,7 +7,7 @@ import configk from "../../utils/configk";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Search as SearchIcon } from 'react-feather';
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
@@ -19,9 +19,9 @@ import {
 // import CustomerListResults from './components/customer/CustomerListResults';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
 // import customers from './__mocks__/customers';
-import { addCourse, courses, refreshRows, checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, refreshRows, checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
-import { DataGrid, gridRowsLookupSelector } from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";

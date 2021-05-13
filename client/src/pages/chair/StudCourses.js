@@ -9,7 +9,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useNavigate } from 'react-router-dom';
 import { Search as SearchIcon } from 'react-feather';
 import DeleteIcon from "@material-ui/icons/Delete";
-import { green,red } from '@material-ui/core/colors';
 
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';

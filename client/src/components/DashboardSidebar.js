@@ -6,7 +6,6 @@ import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -18,12 +17,9 @@ import {
   BarChart as BarChartIcon,
   Lock as LockIcon,
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  BookOpen as BookOpen, 
-  Users as UsersIcon
-} from 'react-feather';
+  BookOpen as BookOpen} from 'react-feather';
 
 import NavItem from './NavItem';
 const type=localStorage.getItem("type");

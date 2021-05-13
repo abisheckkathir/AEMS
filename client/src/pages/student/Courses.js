@@ -16,21 +16,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useNavigate } from 'react-router-dom';
-import { Search as SearchIcon } from 'react-feather';
 import Divider from '@material-ui/core/Divider';
-import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import {
-  Box, Container, Card, CardContent,
-  InputAdornment,
-  SvgIcon
-} from '@material-ui/core';
+  Box, Container, Card} from '@material-ui/core';
 import CustomerListToolbar from '../../components/customer/CustomerListToolbar';
-import { addCourse, courses, refreshRows, checkAuthenticated } from "../../actions/action.auth";
+import { addCourse, refreshRows, checkAuthenticated } from "../../actions/action.auth";
 import { connect } from "react-redux";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Backdrop from '@material-ui/core/Backdrop';
