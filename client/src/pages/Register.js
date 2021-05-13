@@ -30,8 +30,7 @@ const Register = ({ signup, isAuthenticated }) => {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   useEffect(() => {
     const handleWindowResize = () => {
-      console.log
-      setWindowHeight(window.innerHeight);
+\      setWindowHeight(window.innerHeight);
 
     };
 
