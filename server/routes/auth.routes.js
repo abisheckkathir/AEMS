@@ -415,6 +415,7 @@ router.post('/approve-course/:ids', (req, res) => {
 router.post('/assign-course/:ids/:fid', (req, res) => {
   console.log('assign')
   var idarr = req.params.ids.split(",")
+  console.log(fid)
   var fid= req.params.fid.split(",")
   var flen=idarr.length
   assignSchema.deleteMany({ 'studentID': { '$in': fid }}, (error, data) => {

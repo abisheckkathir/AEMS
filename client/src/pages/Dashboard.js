@@ -16,6 +16,7 @@ import TrafficByDevice from '../components/dashboard//TrafficByDevice';
 
 function Dashboard({refreshRows,isAuthenticated,courseLoaded }){
   const user = JSON.parse(localStorage.getItem("user"));
+  localStorage.setItem("ec",false)
   const navigate = useNavigate();
   if (user==null ){
     window.location.reload(false);

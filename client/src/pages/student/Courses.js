@@ -88,6 +88,7 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
   const studentid = localStorage.getItem("idno");
   var csdet;
   const [copen, setCopen] = React.useState(false);
+  const [ec, setec] = React.useState(false);
   if (localStorage.open) {
     console.log(copen)
 
@@ -98,6 +99,17 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
 
   } else {
     localStorage.setItem("open", false)
+  }
+  if (localStorage.ec) {
+    console.log(ec)
+
+    if (JSON.parse(localStorage.ec) != ec) {
+      setCopen(JSON.parse(localStorage.ec));
+      console.log(ec)
+    }
+
+  } else {
+    localStorage.setItem("ec", false)
   }
   const navigate = useNavigate();
   const [checked, setChecked] = React.useState([]);
@@ -137,6 +149,10 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
   const handleClose = () => {
     navigate('/app/dashboard', { replace: true });
   };
+  const handleEchange = () => {
+    setec(true);
+    localStorage.setItem("ec", true)
+  };
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
@@ -151,8 +167,16 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
   const submitCourse = () => {
     if (right.length > 0) {
       console.log(studentid);
+      var sid;
+      setec(false)
+      localStorage.setItem("ec".false)
+      if(ec){
+        sid="!EC"+studentid    ;  
+      }else{
+        sid=studentid;
+      }
       axios
-        .post(`${configk.backend}/api/auth/assign-course/${right}/${studentid}`)
+        .post(`${configk.backend}/api/auth/assign-course/${right}/${sid}`)
         .then(a => {
           refreshRows();
         })
@@ -212,14 +236,13 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
       }
     }
 
-    // console.log(cours);
     return (
       <>
         <Helmet>
           <title>Courses | AEMS</title>
         </Helmet>
         <Dialog
-          open={!copen}
+          open={!(copen || ec )}
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           TransitionComponent={Transition}
@@ -236,7 +259,10 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
-              OK
+              Close
+          </Button>
+          <Button onClick={handleEchange} color="primary">
+              Elective Change
           </Button>
           </DialogActions>
         </Dialog>
@@ -275,41 +301,7 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
                   >
                     Submit Preference
       </Button>
-                  {/* <Button
-        variant="contained"
-        color="secondary"
-        disabled={delt}
-        // onClick={deleteCourse}
-        startIcon={<DeleteIcon />}
-      >
-        Delete Course
-      </Button> */}
                 </Box>
-                {/* <Box sx={{ mt: 3 }}>
-      <Card>
-        <CardContent>
-          <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      fontSize="small"
-                      color="action"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Search course"
-              variant="outlined"
-            />
-          </Box>
-        </CardContent>
-      </Card>
-    </Box> */}
               </Box>
 
               <Box height={300} sx={{ pt: 3 }}>
