@@ -186,7 +186,7 @@ function CoursesF({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
   if (courseLoaded) {
     if (coursesData) {
       csdet = coursesData.courses;
-      if (!flag && rows.length == 0) {
+      if (!flag && rows.length == 0 && csdet.length!=0) {
         setRows(csdet);
         console.log("set")
         flag = true;

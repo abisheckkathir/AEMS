@@ -206,7 +206,7 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
   if (courseLoaded) {
     if (coursesData) {
       csdet = coursesData.courses;
-      if (!flag && left.length == 0) {
+      if (!flag && left.length == 0 && right.length==0 && csdet.length!=0) {
         setLeft(csdet);
         flag = true;
       }

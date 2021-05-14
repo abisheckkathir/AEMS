@@ -196,7 +196,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
     refreshAssign();
     if (assignData) {
       csdet = assignData.courses;
-      if (!flag && rows.length == 0) {
+      if (!flag && rows.length == 0 && csdet.length!=0) {
         setRows(csdet);
         console.log("set")
         flag = true;
