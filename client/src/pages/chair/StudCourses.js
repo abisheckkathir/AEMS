@@ -12,6 +12,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Box, Container, Card, CardContent,
@@ -80,12 +81,12 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
   var flag = false;
   const [copen, setCopen] = React.useState(false);
   if (localStorage.open) {
-    if(JSON.parse(localStorage.open)!=copen){
+    if (JSON.parse(localStorage.open) != copen) {
       setCopen(JSON.parse(localStorage.open));
     }
-    
-  }else{
-    localStorage.setItem("open",false)
+
+  } else {
+    localStorage.setItem("open", false)
   }
   const facultyid = localStorage.getItem("idno");
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
 
     var a = rows.filter((value) => {
       console.log(value.courseName)
-      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.studentID.toString().toLowerCase().search(stext) !== -1))
+      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1)|| (value.isApproved.toString().toLowerCase().search(stext) !== -1) || (value.studentID.toString().toLowerCase().search(stext) !== -1))
     });
 
     console.log(a)
@@ -139,12 +140,19 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
   };
 
   const openCourse = () => {
-    localStorage.setItem("open",true);
+    localStorage.setItem("open", true);
     setCopen(true);
   };
   const closeCourse = () => {
-    localStorage.setItem("open",false);
+    localStorage.setItem("open", false);
     setCopen(false);
+  };
+  const downloadCSV = () => {
+    var arows = (srows) ? srows : rows
+    let csvContent = "data:text/csv;charset=utf-8,Course Code,Course Name,StudentID,isApproved\n"
+      + arows.map(e => e.courseCode + "," + e.courseName + "," + e.studentID + "," + e.isApproved).join("\n");
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
   };
 
   if (!facultyid) {
@@ -196,7 +204,7 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
     refreshAssign();
     if (assignData) {
       csdet = assignData.courses;
-      if (!flag && rows.length == 0 && csdet.length!=0) {
+      if (!flag && rows.length == 0 && csdet.length != 0) {
         setRows(csdet);
         console.log("set")
         flag = true;
@@ -230,8 +238,18 @@ function StudCourses({ addCourse, refreshAssign, checkAuthenticated, reset, isAu
                   sx={{
                     display: 'flex',
                     justifyContent: 'flex-end'
-                  }}
-                >
+                  }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={((srows) ? srows : rows).length == 0}
+                    style={{ marginRight: 10 }}
+                    onClick={downloadCSV}
+                    startIcon={<GetAppOutlinedIcon />}
+                  >
+                    Download Visible
+    </Button>
+
                   <Button
                     variant="contained"
                     color="primary"

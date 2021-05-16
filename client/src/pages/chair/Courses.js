@@ -87,7 +87,7 @@ function CoursesC({ addCourse, refreshRows, checkAuthenticated,reset, isAuthenti
     
     var a=rows.filter((value) => {
       console.log(value.courseName)
-      return ((value.courseName.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.offeringFaculty.toString().toLowerCase().search(stext) !== -1))
+      return ((value.courseName.toString().toLowerCase().search(stext) !== -1)|| (value.isApproved.toString().toLowerCase().search(stext) !== -1) || (value.courseCode.toString().toLowerCase().search(stext) !== -1) || (value.offeringFaculty.toString().toLowerCase().search(stext) !== -1))
     });
 
     console.log(a)
