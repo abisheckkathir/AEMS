@@ -1,0 +1,20 @@
+version: "3"
+services: 
+    aems-client:
+        image: aems-client
+        build: ./client/
+        stdin_open: true
+        ports: 
+            - "3000:3000"
+        networks: 
+            - aems-app
+    aems-server:
+        image: aems-server
+        build: ./server/
+        ports: 
+            - "4000:4000"
+        networks: 
+            - aems-app
+networks: 
+    aems-app:
+        driver: bridge

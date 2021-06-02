@@ -1,11 +1,10 @@
-# To run the server:
-#### - Run npm install
-#### - Run npm start
+# To install modules:
+#### - Run yarn install
+# To run server:
+#### - Run yarn run server
 
 # To run the client:
-#### - Navigate to client2
-#### - Run yarn install
-#### - Run yarn start
+#### - Run yarn run client
 
 # To run integration testing:
 #### - Install Selenium on Python using "pip install selenium"

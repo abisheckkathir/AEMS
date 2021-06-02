@@ -6,3 +6,6 @@ yarn.lock
 client2/yarn.lock
 client/src/utils/configk.js
 .replit
+.vscode/dryrun.log
+.vscode/targets.log
+.vscode/configurationCache.log
