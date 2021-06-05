@@ -8,6 +8,7 @@ let courseSchema =new Schema({
         type: String,
         unique: true,
         required: true,
+        
     },
     courseName:{
         type: String,
