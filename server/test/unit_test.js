@@ -14,6 +14,7 @@ before( done =>
 });
 describe('Unit testing for Register User',() => {
     it('register faculty 1',async function(){
+      this.timeout(10000);
         const config = {
             headers: {
               "Content-Type": "application/json",
@@ -225,9 +226,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'facultytest4',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-faculty',body,config).then((response) => {
-            expect(response.status).to.equal(401);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-faculty',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     it('signin imposter faculty 2',async function(){
         const config = {
@@ -236,8 +237,8 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'facultytest5',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-faculty',body,config).then((response) => {
-            expect(response.status).to.equal(401);
+        await axios.post('http://localhost:4000/api/auth/signin-faculty',body,config).catch(function(e){
+            expect(e.response.status).to.equal(401);
         });
     });
     it('signin genuine student 1',async function(){
@@ -247,9 +248,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'studenttest1',password:'1234567'});
-        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).then((response) => {
-            expect(response.status).to.equal(200);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     it('signin genuine student 2',async function(){
         const config = {
@@ -280,10 +281,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'studenttest1',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).then((response) => {
-            // console.log(response);
-            expect(response.status).to.equal(401);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     it('signin imposter student 2',async function(){
         const config = {
@@ -292,10 +292,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'studenttest2',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).then((response) => {
-            // console.log(response);
-            expect(response.status).to.equal(200);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-student',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     it('signin genuine chair 1',async function(){
         const config = {
@@ -337,9 +336,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'chairtest4',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-chair',body,config).then((response) => {
-            expect(response.status).to.equal(401);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-chair',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     it('signin imposter chair 2',async function(){
         const config = {
@@ -348,9 +347,9 @@ describe('Unit testing for Sign In User',() => {
             },
           };
         const body = JSON.stringify({idno:'chairtest5',password:'12345667'});
-        await axios.post('http://localhost:4000/api/auth/signin-chair',body,config).then((response) => {
-            expect(response.status).to.equal(401);
-        });
+        await axios.post('http://localhost:4000/api/auth/signin-chair',body,config).catch(function(e){
+          expect(e.response.status).to.equal(401);
+      });
     });
     
 });
