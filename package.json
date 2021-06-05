@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test/unit_test.js --reporter spec",
+    "test": "mocha --reporter spec",
     "server": "cd server/ && nodemon server",
     "client": "cd client/ && react-scripts start",
     "start": "concurrently \"yarn run server\" \"yarn run client\""

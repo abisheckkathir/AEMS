@@ -1,8 +1,8 @@
 var expect = require('chai').expect;
-var auth = require('../server/routes/auth.routes');
+var auth = require('../routes/auth.routes');
 var axios = require('axios');
 const request = require('supertest');
-var server = require( '../server/server' )
+var server = require( '../server' )
 describe('Server start test',() => {
 before( done =>
   {this.timeout(5000);
