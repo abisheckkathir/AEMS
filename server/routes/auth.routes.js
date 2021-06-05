@@ -16,19 +16,19 @@ router.get("/", auth, async (req, res) => {
     const user = await facultySchema.findById(req.user.userId).select("-password");
     res.json(user);
   } catch (err) {
-    console.error(err);
+    //console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
 // Sign-in student
 router.post('/signin-student', (req, res, next) => {
-  console.log("entered backend signin");
+  //console.log("entered backend signin");
   let getUser;
-  console.log(req.body.idno);
+  //console.log(req.body.idno);
   studentSchema.findOne({ idno: req.body.idno }).then((user) => {
     if (!user) {
-      console.log('Authentication failed1')
-      console.log(user);
+      //console.log('Authentication failed1')
+      //console.log(user);
       return res.status(401).json({
         message: 'Authentication failed',
       });
@@ -37,7 +37,7 @@ router.post('/signin-student', (req, res, next) => {
     return bcrypt.compare(req.body.password, user.password);
   }).then((response) => {
     if (!response) {
-      console.log('Authentication failed2')
+      //console.log('Authentication failed2')
        res.status(401).json({
         message: 'Authentication failed',
       });
@@ -67,12 +67,12 @@ router.post('/signin-student', (req, res, next) => {
 
 // Sign-in faculty
 router.post('/signin-faculty', (req, res, next) => {
-  console.log("entered backend signin");
+  //console.log("entered backend signin");
 
   let getUser;
   facultySchema.findOne({ idno: req.body.idno }).then((user) => {
     if (!user) {
-      console.log('Authentication failed1')
+      //console.log('Authentication failed1')
       return res.status(401).json({
         message: 'Authentication failed',
       });
@@ -81,7 +81,7 @@ router.post('/signin-faculty', (req, res, next) => {
     return bcrypt.compare(req.body.password, user.password);
   }).then((response) => {
     if (!response) {
-      console.log('Authentication failed2')
+      //console.log('Authentication failed2')
       return res.status(401).json({
         message: 'Authentication failed',
       });
@@ -114,7 +114,7 @@ router.post('/signin-chair', (req, res, next) => {
   let getUser;
   chairSchema.findOne({ idno: req.body.idno }).then((user) => {
     if (!user) {
-      console.log('Authentication failed1')
+      //console.log('Authentication failed1')
       return res.status(401).json({
         message: 'Authentication failed',
       });
@@ -123,7 +123,7 @@ router.post('/signin-chair', (req, res, next) => {
     return bcrypt.compare(req.body.password, user.password);
   }).then((response) => {
     if (!response) {
-      console.log('Authentication failed2')
+      //console.log('Authentication failed2')
       return res.status(401).json({
         message: 'Authentication failed',
       });
@@ -153,7 +153,7 @@ router.post('/signin-chair', (req, res, next) => {
 
 //Add course by faculty
 router.post('/add-course', (req, res) => {
-    console.log('course')
+    //console.log('course')
     const course = courseSchema.findOne({ courseCode: req.body.courseCode })
     if (!course) {
       return res.status(400).json()
@@ -168,7 +168,7 @@ router.post('/add-course', (req, res) => {
       _id:req.body.courseCode+req.body.courseName+req.body.offeringFaculty,
     })
     newCourse.save().then((response) => {
-      console.log('done');
+      //console.log('done');
       return res.status(200).json({
         resp:response
       });
@@ -210,7 +210,7 @@ router.post(
             let jwtToken = jwt.sign(payload, "longer-secret-is-better", {
               expiresIn: "1h",
             });
-            console.log(user);
+            //console.log(user);
             //Send authorization token
             return res.status(200).json({
               token: jwtToken,
@@ -224,7 +224,7 @@ router.post(
             res.status(500).json({
               error: error,
             });
-            console.log(error);
+            //console.log(error);
           });
       });
     }
@@ -278,7 +278,7 @@ router.post(
             res.status(500).json({
               error: error,
             });
-            console.log(error);
+            //console.log(error);
           });
       });
     }
@@ -332,14 +332,14 @@ router.post(
             res.status(500).json({
               error: error,
             });
-            console.log(error);
+            //console.log(error);
           });
       });
     }
   }
 );
 router.route("/course-list").get((req, res) => {
-  console.log("courselist")
+  //console.log("courselist")
   if (req.query.offeringFaculty.length==0){
     courseSchema.find((error, response) => {
       if (error) {
@@ -348,7 +348,7 @@ router.route("/course-list").get((req, res) => {
           message: "Authentication failed",
         });
       } else {
-        // console.log(response)
+        // //console.log(response)
         res.status(200).json(response);
       }
     });
@@ -361,7 +361,7 @@ router.route("/course-list").get((req, res) => {
         message: "Authentication failed",
       });
     } else {
-      // console.log(response)
+      // //console.log(response)
       res.status(200).json(response);
     }
   });
@@ -369,14 +369,14 @@ router.route("/course-list").get((req, res) => {
 });
 
 router.route("/delete-course/:ids/:fid").delete((req, res, next) => {
-  console.log(req.params);
+  //console.log(req.params);
   var idarr = req.params.ids.split(",");
   var fid= req.params.fid.split(",")
   courseSchema.deleteMany({ 'courseCode': { '$in': idarr },'offeringFaculty': { '$in': fid } }, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
       res.status(200).json({
         msg: data,
       });
@@ -391,13 +391,13 @@ router.route("/delete-course/:ids/:fid").delete((req, res, next) => {
   });
 });
 router.post('/approve-course/:ids', (req, res) => {
-  console.log('approve')
+  //console.log('approve')
   var idarr = req.params.ids.split(",");
   courseSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"Yes"}}, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
       res.status(200).json({
         msg: data,
       });
@@ -413,9 +413,9 @@ router.post('/approve-course/:ids', (req, res) => {
 
 });
 router.post('/assign-course/:ids/:fid', (req, res) => {
-  console.log('assign')
+  //console.log('assign')
   var idarr = req.params.ids.split(",")
-  console.log(fid)
+  //console.log(fid)
   var fid= req.params.fid.split(",")
   var flen=idarr.length
   assignSchema.deleteMany({ 'studentID': { '$in': fid }}, (error, data) => {
@@ -434,13 +434,13 @@ router.post('/assign-course/:ids/:fid', (req, res) => {
   
 });
 router.post('/reject-course/:ids', (req, res) => {
-  console.log('reject')
+  //console.log('reject')
   var idarr = req.params.ids.split(",");
   courseSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"No"}}, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
       res.status(200).json({
         msg: data,
       });
@@ -456,13 +456,13 @@ router.post('/reject-course/:ids', (req, res) => {
 
 });
 router.post('/approve-assign/:ids', (req, res) => {
-  console.log('approve')
+  //console.log('approve')
   var idarr = req.params.ids.split(",");
   assignSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"Yes"}}, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
       res.status(200).json({
         msg: data,
       });
@@ -478,13 +478,13 @@ router.post('/approve-assign/:ids', (req, res) => {
 
 });
 router.post('/reject-assign/:ids', (req, res) => {
-  console.log('reject')
+  //console.log('reject')
   var idarr = req.params.ids.split(",");
   assignSchema.updateMany({ '_id': { '$in': idarr }},{ $set: { isApproved:"No"}}, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
       res.status(200).json({
         msg: data,
       });
@@ -504,10 +504,10 @@ router.post('/reject-assign/:ids', (req, res) => {
 router.route("/delete-faculty/:id").delete((req, res, next) => {
   facultySchema.deleteOne({ 'idno': req.params.id, }, (error, data) => {
     if (error) {
-      console.log(error);
+      //console.log(error);
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
 
       res.status(200).json({
         msg: data,
@@ -525,10 +525,10 @@ router.route("/delete-faculty/:id").delete((req, res, next) => {
 router.route("/delete-student/:id").delete((req, res, next) => {
   studentSchema.deleteOne({ 'idno': req.params.id, }, (error, data) => {
     if (error) {
-      console.log(error);
+      //console.log(error);
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
 
       res.status(200).json({
         msg: data,
@@ -546,10 +546,10 @@ router.route("/delete-student/:id").delete((req, res, next) => {
 router.route("/delete-chair/:id").delete((req, res, next) => {
   chairSchema.deleteOne({ 'idno': req.params.id, }, (error, data) => {
     if (error) {
-      console.log(error);
+      //console.log(error);
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      //console.log(data);
 
       res.status(200).json({
         msg: data,
@@ -565,7 +565,7 @@ router.route("/delete-chair/:id").delete((req, res, next) => {
   });
 });
 router.route("/assign-list").get((req, res) => {
-  console.log("assignlist")
+  //console.log("assignlist")
   if (req.query.studentID.length==0){
     assignSchema.find((error, response) => {
       if (error) {
@@ -574,7 +574,7 @@ router.route("/assign-list").get((req, res) => {
           message: "Authentication failed",
         });
       } else {
-        // console.log(response)
+        // //console.log(response)
         res.status(200).json(response);
       }
     });
@@ -587,7 +587,7 @@ router.route("/assign-list").get((req, res) => {
         message: "Authentication failed",
       });
     } else {
-      // console.log(response)
+      // //console.log(response)
       res.status(200).json(response);
     }
   });
