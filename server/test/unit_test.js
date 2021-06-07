@@ -491,22 +491,22 @@ describe('Unit testing for Add Course',() => {
 });
 describe('Unit testing for Delete Course',() => {
     it('delete course 1',async function(){
-        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'111'}/${'facultytest'}`).then((response) => {
+        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'111AAAfacultytest'}`).then((response) => {
             expect(response.status).to.equal(200);
         });
     });
     it('delete course 2',async function(){
-        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'222'}/${'facultytest'}`).then((response) => {
+        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'222BBBfacultytest'}`).then((response) => {
             expect(response.status).to.equal(200);
         });
     });
     it('delete course 3',async function(){
-        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'333'}/${'facultytest'}`).then((response) => {
+        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'333CCCfacultytest'}`).then((response) => {
             expect(response.status).to.equal(200);
         });
     });
     it('delete course 4',async function(){
-        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'444'}/${'facultytest'}`).then((response) => {
+        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'444DDDfacultytest'}`).then((response) => {
             expect(response.status).to.equal(200);
         });
     });
