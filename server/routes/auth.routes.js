@@ -369,14 +369,16 @@ router.route("/course-list").get((req, res) => {
 });
 
 router.route("/delete-course/:ids/:fid").delete((req, res, next) => {
-  //console.log(req.params);
+  console.log(req.params);
   var idarr = req.params.ids.split(",");
   var fid= req.params.fid.split(",")
-  courseSchema.deleteMany({ 'courseCode': { '$in': idarr },'offeringFaculty': { '$in': fid } }, (error, data) => {
+  console.log(idarr);
+  console.log(fid);
+  courseSchema.deleteMany({ '_id': { '$in': idarr }}, (error, data) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      //console.log(data);
+      console.log(data);
       res.status(200).json({
         msg: data,
       });
