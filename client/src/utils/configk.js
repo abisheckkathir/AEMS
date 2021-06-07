@@ -1,4 +1,4 @@
 module.exports = {
-    backend: 'http://10.0.0.231:4000'
+    backend: 'http://http://65.1.85.159/:4000'
     
 }
