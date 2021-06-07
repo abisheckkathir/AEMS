@@ -118,7 +118,7 @@ function CoursesF({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
     if (selected.length > 0) {
       console.log(facultyid);
       axios
-        .delete(`${configk.backend}/api/auth/delete-course/${selected}/${facultyid}`)
+        .delete(`${configk.backend}/api/auth/delete-course/${selected}`)
         .then(a => {
           refreshRows();
         })

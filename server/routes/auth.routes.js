@@ -368,12 +368,10 @@ router.route("/course-list").get((req, res) => {
 }
 });
 
-router.route("/delete-course/:ids/:fid").delete((req, res, next) => {
-  console.log(req.params);
+router.route("/delete-course/:ids").delete((req, res, next) => {
+  // console.log(req.params);
   var idarr = req.params.ids.split(",");
-  var fid= req.params.fid.split(",")
-  console.log(idarr);
-  console.log(fid);
+  // console.log(idarr);
   courseSchema.deleteMany({ '_id': { '$in': idarr }}, (error, data) => {
     if (error) {
       return next(error);

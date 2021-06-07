@@ -511,7 +511,7 @@ describe('Unit testing for Delete Course',() => {
         });
     });
     it('delete course 5',async function(){
-        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'555'}/${'facultytest'}`).then((response) => {
+        await axios.delete(`http://localhost:4000/api/auth/delete-course/${'555EEEfacultytest'}`).then((response) => {
             expect(response.status).to.equal(200);
         });
     });
