@@ -83,7 +83,7 @@ const Login = ({ login, isAuthenticated }) => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Log in
                   </Typography>
                   <Typography
                     color="textSecondary"
