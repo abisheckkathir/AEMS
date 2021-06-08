@@ -169,7 +169,7 @@ function CoursesS({ addCourse, refreshRows, checkAuthenticated, isAuthenticated,
       console.log(studentid);
       var sid;
       setec(false)
-      localStorage.setItem("ec".false)
+      localStorage.setItem("ec",false)
       if(ec){
         sid="!EC"+studentid    ;  
       }else{
