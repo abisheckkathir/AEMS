@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/abisheckkathir/AEMS#readme",
   "dependencies": {
+    "@babel/core": "^7.14.3",
     "@emotion/react": "11.4.0",
     "@emotion/styled": "11.3.0",
     "@fontsource/roboto": "4.3.0",
