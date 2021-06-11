@@ -376,7 +376,7 @@ router.route("/delete-course/:ids").delete((req, res, next) => {
     if (error) {
       return next(error);
     } else if (data.deletedCount != 0) {
-      console.log(data);
+      // console.log(data);
       res.status(200).json({
         msg: data,
       });
