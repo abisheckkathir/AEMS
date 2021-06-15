@@ -21,7 +21,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.get('/', (req, res) => {
-    res.send('hello');
+    res.send('hello there');
+    
 });
 
 let PORT = process.env.PORT || 8080;
