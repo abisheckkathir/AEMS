@@ -1,4 +1,4 @@
-# Amrita Elective Management System
+<h1 align="center">Amrita Elective Management System</h1>
 
 AEMS is a platform that acts as bridge between the students and the institution making the process of opting the elective seamless for both.
 
